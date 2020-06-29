@@ -1,4 +1,5 @@
 
+/*Home page specific*/
 #homepageBackground {
 	background: url(https://images.unsplash.com/photo-1443996104801-80c82e789b18?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1053&q=80);
 	/*background-repeat: no-repeat;*/
@@ -8,21 +9,11 @@
 	background-position: center;
 	text-align: center;
 }
-
-#footer {
-    text-color: pink;
-}
-.input-group-text {
-    text-align: center;
-}
 #mainHeading {
 	color:	rgba(255,255,255,0.8);
 }
 #map {
     height: 300px;
-}
-#howItWorksContent {
-    padding-top: 70px;
 }
 #homeCenter {
     padding-top: 22%;
@@ -32,4 +23,9 @@ hr {
 }
 #mainQuestion {
     color:	rgba(200,200,255,0.8);
+}
+
+/*How it works specific*/
+#howItWorksContent {
+    padding-top: 70px;
 }
