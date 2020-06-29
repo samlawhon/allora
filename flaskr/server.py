@@ -5,7 +5,11 @@ import settings
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+@app.route('/')
+def home():
+    return render_template('home.html')
+
 @app.route('/map')
 def map():
-    return render_template('hikingApp.html',
+    return render_template('home.html',
                            OPEN_WEATHER_API_KEY=settings.OPEN_WEATHER_API_KEY)
