@@ -29,3 +29,6 @@ input[type="text"] {
 	font-family: Arial;
 	top: 10%;
 }
+#map {
+    height: 300px;
+}

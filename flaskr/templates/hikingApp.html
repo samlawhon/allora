@@ -2,7 +2,15 @@
 <html>
 <head>
 	<title>Trail Project</title>
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
 	<link rel="stylesheet" type="text/css" href="hikingApp.css">
+
 </head>
 <body>
 	<h1 id="heading">Find your next adventure</h1>
@@ -10,6 +18,27 @@
 		<h3>Where would you like to go?</h3>
 		<input type="text" name="location" placeholder="Nederland, CO">
 	</div>
+	<div id="map"></div>
+	<script>
+		var map = L.map('map').setView([39.9614, -105.5108], 13);
+
+var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png ', {
+    attribution: 'OpenStreetMap',
+    maxZoom: 18,
+    tileSize: 512,
+    zoomOffset: -1,
+});
+var weather = L.tileLayer('http://maps.openweathermap.org/maps/2.0/weather/PR0/{z}/{x}/{y}?appid={appid}', {
+	appid: '{{OPEN_WEATHER_API_KEY}}'
+});
+var baseLayers = {
+	"OSM Layer": osmLayer
+}
+var overlays = {
+	"Precipitation": weather
+}
+L.control.layers(baseLayers,overlays).addTo(map);
+	</script>
 
 </body>
 </html>
