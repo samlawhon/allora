@@ -9,6 +9,10 @@ app.config.from_object(__name__)
 def home():
     return render_template('home.html')
 
+@app.route('/how-it-works')
+def how_it_works():
+    return render_template('how-it-works.html')
+
 @app.route('/map')
 def map():
     return render_template('home.html',

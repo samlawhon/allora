@@ -1,9 +1,8 @@
 <!Doctype html>
 <html>
   <head>
-    {% block head %}
-    <!--Importing our own style sheet-->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}{% endblock %}
+    <meta charset="UTF-8">
     <!--Leaflet CDN-->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
@@ -16,14 +15,15 @@
 	<!--Bootstrap CDN-->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--Importing our own style sheet. NOTE: must come last to override Bootstrap-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>{% block title %}{% endblock %} - Eldora</title>
-    {% endblock %}
   </head>
   <body>
     <div id="content">
-        <!--Navagation bar, no links yet-->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="#">
+        <!--Navigation bar, no links yet-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+          <a class="navbar-brand" href="/">
               <img src="https://i.redd.it/w3kr4m2fi3111.png" width="30" height="30" class="d-inline-block align-top" alt="">
               Eldora
           </a>
@@ -37,7 +37,7 @@
                 <a class="nav-link" href="#">About<span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">How it works</a>
+                <a class="nav-link" href="/how-it-works">How it works</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
