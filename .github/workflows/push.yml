@@ -10,3 +10,5 @@ jobs:
       uses: cclauss/GitHub-Action-for-pylint@master
       with:
         args: pylint **/*.py
+    - name: ESLint Action
+      uses: hallee/eslint-action@1.0.3
