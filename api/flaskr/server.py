@@ -2,7 +2,7 @@
 Main server routes
 """
 from flask import Flask, render_template
-import settings
+from api import settings
 from .name_generator import nameofroute
 
 app = Flask(__name__)
