@@ -11,8 +11,8 @@ import { Collapse,
 } from 'reactstrap';
 
 const links =  [
-    { href:"/how-it-works", text: "How it works" },
-    { href:"https://www.mountaineers.org/blog/what-are-the-ten-essentials",  text: "Further reading"}
+    { id: 0, href:"/how-it-works", text: "How it works" },
+    { id: 1, href:"https://www.mountaineers.org/blog/what-are-the-ten-essentials",  text: "Further reading"}
 ]
 
 const createNavItem = ({href, text, className}) => (
