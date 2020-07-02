@@ -2,7 +2,7 @@
 Main server routes
 """
 from flask import Flask, render_template
-import settings
+from api import settings
 
 app = Flask(__name__)
 app.config.from_object(__name__)
