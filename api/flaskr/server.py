@@ -3,6 +3,7 @@ Main server routes
 """
 from flask import Flask, render_template
 from api import settings
+from .name_generator import nameofroute
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -16,6 +17,9 @@ def home():
     """
     return render_template('home.html')
 
+@app.route('/name')
+def name():
+    return {'name': nameofroute()}
 
 @app.route('/how-it-works')
 def how_it_works():

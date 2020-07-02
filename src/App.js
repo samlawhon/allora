@@ -1,23 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import NavigationBar from './components/NavigationBar';
 
 function App() {
+  const [currentQuote, setCurrentQuote] = useState(0);
+
+  const [selectedRoute, setSelectedRoute] = useState(0);
+
+  useEffect(() => {
+    fetch('/name').then(res=>res.json()).then(data => {
+    setCurrentQuote(data.name);
+    });
+    }, []);
+
   return (
     <div className="App">
+      <NavigationBar/>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <p> Pearl of wisdom is:  {currentQuote}</p>
       </header>
     </div>
   );
