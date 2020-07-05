@@ -5,7 +5,7 @@ class MainPage extends Component {
 
     constructor(props) {
         super(props);
-
+        this.submitHandler = this.submitHandler.bind(this)
         this.state = {
             location: null
         }
@@ -13,8 +13,8 @@ class MainPage extends Component {
 
     submitHandler(event) {
         event.preventDefault();
-        this.setState({location: event.target.value})
-        console.log("Here")
+        this.setState({location: event.currentTarget.value});
+        alert(event.currentTarget.value);
     }
 
     render() {
@@ -26,7 +26,7 @@ class MainPage extends Component {
                             <h1 className="display-4" id="mainHeading">Plan your next adventure: </h1>
                             <h1 id="mainQuestion">Where to?</h1>
                             <hr id="mainpageLine" />
-                            <form onSubmit= { this.submitHandler() }>
+                            <form onSubmit= { this.submitHandler }>
                                 <input className="form-control" type="text" name="location" placeholder="Nederland, CO"/>
                             </form>
                         </div>

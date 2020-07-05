@@ -3,11 +3,11 @@ Main server routes
 """
 from flask import Flask, render_template, request
 from api import settings
-from .hiking import HikingApi
-from .name_generator import nameofroute
+from api.flaskr.hiking import HikingApi
+from api.flaskr.name_generator import nameofroute
 import requests
 import json
-from .geocoding_api import geocode
+from api.flaskr.geocoding_api import geocode
 
 
 app = Flask(__name__)
@@ -40,9 +40,10 @@ def trails():
     city_name = coords_and_distance['city_name']
     max_distance = coords_and_distance['distance']
     lat_lng = geocode(city_name)
-    hikingAPI = HikingApi()
-    trails = hikingAPI.get_trails(lat_lng[0], lat_lng[1], max_distance)
-    trails_dicts = [trail.asDict() for trail in trails]
+    if lat_lng is None: return '500'
+    hiking_api = HikingApi()
+    trails = hiking_api.get_trails(lat_lng[0], lat_lng[1], max_distance)
+    trails_dicts = [trail.as_dict() for trail in trails]
     return json.dumps(trails_dicts)
 
 @app.route('/how-it-works')

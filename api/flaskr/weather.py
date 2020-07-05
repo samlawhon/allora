@@ -14,7 +14,7 @@ class WeatherApi:
         self.day = day
 
     # needs to be clarified - open weather key wasn't working, so I haven't tested
-    def getCurrentWeather(self):
+    def get_current_weather(self):
         current_weather_endpoint = self.ENDPOINT + "weather?"
         payload = {'lat': str(self.lat), 'lon': str(self.lon), 'appid': OPEN_WEATHER_API_KEY}
         response = requests.get(current_weather_endpoint, payload)

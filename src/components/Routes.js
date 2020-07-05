@@ -36,11 +36,16 @@ class Routes extends Component {
 
     render() {
         if (this.state.trails!=null) {
-            return (
-                <div>
-                {this.state.trails.map(createRouteCard)}
-                </div>
-            );
+            if (this.state.trails!='500') {
+                return (
+                    <div>
+                    {this.state.trails.map(createRouteCard)}
+                    </div>
+                );
+            }
+            else {
+                alert("Can't find location");
+            }
         }
         else {
             return (
