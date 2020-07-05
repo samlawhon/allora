@@ -1,27 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import RoutesMap from './components/RoutesMap';
 import NavigationBar from './components/NavigationBar';
+import MainPage from './components/MainPage';
 
-function App() {
-  const [currentQuote, setCurrentQuote] = useState(0);
+class App extends Component {
 
-  const [selectedRoute, setSelectedRoute] = useState(0);
+  constructor(props) {
 
-  useEffect(() => {
-    fetch('/name').then(res=>res.json()).then(data => {
-    setCurrentQuote(data.name);
-    });
-    }, []);
+    super(props);
 
+    this.state = {
+      havePlace: true
+    }
+
+  }
+
+render() {
   return (
     <div className="App">
       <NavigationBar/>
-      <header className="App-header">
-        <p> Pearl of wisdom is:  {currentQuote}</p>
-      </header>
+      <MainPage/>
+      <RoutesMap havePlace={this.state.havePlace}/>
     </div>
   );
 }
+}
+  
 
 export default App;
