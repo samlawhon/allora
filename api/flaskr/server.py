@@ -6,6 +6,8 @@ from api import settings
 from .hiking import HikingApi
 from .name_generator import nameofroute
 import json
+import geopy
+
 
 app = Flask(__name__)
 app.config.from_object(__name__)
