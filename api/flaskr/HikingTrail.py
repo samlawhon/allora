@@ -13,3 +13,6 @@ class HikingTrail:
 
     def __str__(self):
         return self.name
+    
+    def as_dict(self):
+        return {'name':self.name, 'image':self.image_link, 'rating':self.rating}
