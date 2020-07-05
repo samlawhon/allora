@@ -24,7 +24,11 @@ jobs:
       # Run Linter against code base #
       ################################
       - name: Super-Linter
-        uses: github/super-linter@v3.2.0
+        uses: docker://github/super-linter:v3
         env:
           VALIDATE_ALL_CODEBASE: true
-          VALIDATE_ANSIBLE: false
+          VALIDATE_JSON: true
+          VALIDATE_YAML: true
+          VALIDATE_PYTHON: true
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_CSS: true
