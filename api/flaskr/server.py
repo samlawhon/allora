@@ -5,8 +5,9 @@ from flask import Flask, render_template, request
 from api import settings
 from .hiking import HikingApi
 from .name_generator import nameofroute
+import requests
 import json
-import geopy
+from .geocoding_api import geocode
 
 
 app = Flask(__name__)
@@ -36,16 +37,13 @@ def trails():
     :return: list of nearby trails to a given lat and long
     """
     coords_and_distance = request.get_json(force=True)
-    lat = coords_and_distance['lat']
-    lon = coords_and_distance['lon']
+    city_name = coords_and_distance['city_name']
     max_distance = coords_and_distance['distance']
+    lat_lng = geocode(city_name)
     hikingAPI = HikingApi()
-    trails = hikingAPI.get_trails(lat, lon, max_distance)
+    trails = hikingAPI.get_trails(lat_lng[0], lat_lng[1], max_distance)
     trails_dicts = [trail.asDict() for trail in trails]
     return json.dumps(trails_dicts)
-
-
-
 
 @app.route('/how-it-works')
 def how_it_works():

@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import { Container, Row, Col } from 'reactstrap';
+import Routes from './Routes'
+import { formatDiagnostic } from 'typescript';
 
 class RoutesMap extends Component {
 
@@ -9,25 +12,30 @@ class RoutesMap extends Component {
     }
 
     renderMap() {
-        console.log("hit render map");
         if (this.props.havePlace===true) {
             return (
-              <p>I've got a map!</p>
+                <Container>
+                    <Row>
+                        <Col sm="12" md="8">
+                            <h1>Map goes here</h1>
+                        </Col>
+                        <Col sm="12" md="4">
+                            <Routes/>
+                        </Col>
+                    </Row>
+                </Container>
             );
         }
         else {
             return (
-                <p>I'm a sadboi with no map...and an ellipses using boomer</p>
+                <></>
             );
         }
     }
 
     render() {
-        console.log("hit render");
         return (
-            <div>
-                {this.renderMap()}
-            </div>
+            this.renderMap()
         );
     }
 }

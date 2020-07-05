@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import RoutesMap from './components/RoutesMap';
 import NavigationBar from './components/NavigationBar';
+import MainPage from './components/MainPage';
 
 class App extends Component {
 
@@ -11,29 +12,16 @@ class App extends Component {
     super(props);
 
     this.state = {
-      quote: null,
-      havePlace: false
+      havePlace: true
     }
 
-  }
-
-  componentDidMount() {
-    this.getQuote();
-  }
-
-  getQuote() {
-    fetch('/name').then(res => res.json()).then(data => this.setState( {
-        quote: data.name
-      }));
   }
 
 render() {
   return (
     <div className="App">
       <NavigationBar/>
-      <header className="App-header">
-        <p> Pearl of wisdom is:  {this.state.quote}</p>
-      </header>
+      <MainPage/>
       <RoutesMap havePlace={this.state.havePlace}/>
     </div>
   );
