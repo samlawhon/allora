@@ -1,4 +1,7 @@
 {
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
     "env": {
         "browser": true,
         "es2020": true
