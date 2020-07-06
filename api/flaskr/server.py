@@ -12,14 +12,6 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 
-@app.route('/')
-def home():
-    """
-    Default home page
-    :return: rendered template
-    """
-    return render_template('home.html')
-
 @app.route('/trails', methods=['GET'])
 def get_trails():
     """
@@ -36,21 +28,3 @@ def get_trails():
     trails = hiking_api.get_trails(lat_lng[0], lat_lng[1], max_distance)
     trails_dicts = [trail.as_dict() for trail in trails]
     return json.dumps(trails_dicts)
-
-@app.route('/how-it-works')
-def how_it_works():
-    """
-    How it works page
-    :return: rendered template
-    """
-    return render_template('how-it-works.html')
-
-
-@app.route('/map')
-def render_map():
-    """
-    Rendered map
-    :return: rendered template
-    """
-    return render_template('home.html',
-                           OPEN_WEATHER_API_KEY=settings.OPEN_WEATHER_API_KEY)
