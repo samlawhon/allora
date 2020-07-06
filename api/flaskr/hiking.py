@@ -1,7 +1,7 @@
 '''
 Module for interacting with the hiking project API
 '''
-import requests
+import requests # pylint: disable=import-error
 from api.settings import HIKING_PROJECT_API_KEY
 from api.flaskr.hiking_trail import HikingTrail
 

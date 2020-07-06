@@ -2,7 +2,7 @@
 Main server routes
 """
 import json
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request # pylint: disable=import-error
 from api import settings
 from api.flaskr.hiking import HikingApi
 from api.flaskr.geocoding_api import geocode

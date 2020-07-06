@@ -1,7 +1,7 @@
 '''
 Module for interacting with the open weather API
 '''
-import requests
+import requests # pylint: disable=import-error
 from api.settings import OPEN_WEATHER_API_KEY
 
 

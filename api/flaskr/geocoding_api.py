@@ -1,7 +1,7 @@
 '''
 Helpers for interacting with the geocoding api
 '''
-import requests
+import requests # pylint: disable=import-error
 from api.settings import MAPQUEST_API_KEY
 
 def geocode(city_name):
