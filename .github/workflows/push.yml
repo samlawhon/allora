@@ -19,10 +19,10 @@ jobs:
       ##########################
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          if [ -f api/requirements.txt ]; then python3 -m pip install -r api/requirements.txt; fi
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v2
+        with:
+          path: "api/requirements.txt"
 
       ################################
       # Run Linter against code base #
