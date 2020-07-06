@@ -45,3 +45,4 @@ jobs:
           VALIDATE_PYTHON: true
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_CSS: true
+          VALIDATE_HTML: true
