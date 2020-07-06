@@ -154,6 +154,7 @@ dmypy.json
 .env.development.local
 .env.test.local
 .env.production.local
+api/GOOGLE_APPLICATION_CREDENTIALS.json
 
 npm-debug.log*
 yarn-debug.log*

@@ -18,9 +18,9 @@ def get_trails():
     Trails list API endpoint
     :return: list of nearby trails to a given lat and long
     """
-    coords_and_distance = request.get_json(force=True)
-    city_name = coords_and_distance['city_name']
-    max_distance = coords_and_distance['distance']
+    name_and_distance = request.get_json(force=True)
+    city_name = name_and_distance['city_name']
+    max_distance = name_and_distance['distance']
     lat_lng = geocode(city_name)
     if lat_lng is None:
         return '500'

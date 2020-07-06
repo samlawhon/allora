@@ -16,6 +16,3 @@ def geocode(city_name):
                 result['results'][0]['locations'][0]['displayLatLng']['lng'])
     except IndexError:
         return None
-
-
-print(geocode('Nederland, CO'))
