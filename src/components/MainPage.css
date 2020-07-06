@@ -8,18 +8,23 @@
 	background-position: center;
 	text-align: center;
 }
+
 #mainHeading {
-	color:	rgba(255,255,255,0.8);
+	color:	rgba(255, 255, 255, 0.8);
 }
+
 #map {
     height: 300px;
 }
+
 #homeCenter {
     padding-top: 22%;
 }
+
 hr {
     width: 400px;
 }
+
 #mainQuestion {
-    color:	rgba(200,200,255,0.8);
+    color:	rgba(200, 200, 255, 0.8);
 }
