@@ -9,6 +9,9 @@ jobs:
     name: Lint Code Base
     # Set the agent to run on
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6]
 
     ##################
     # Load all steps #
@@ -19,12 +22,27 @@ jobs:
       ##########################
       - name: Checkout Code
         uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "${{ matrix.python-version }}"
+      - name: Confirm python version
+        run: python --version
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v2
+        with:
+          path: "api/requirements.txt"
 
       ################################
       # Run Linter against code base #
       ################################
-      - name: Lint Code Base
-        uses: docker://github/super-linter:v3
+      - name: Super-Linter
+        uses: docker://github/super-linter:v3.0.1
         env:
           VALIDATE_ALL_CODEBASE: true
-          VALIDATE_ANSIBLE: false
+          VALIDATE_JSON: true
+          VALIDATE_YAML: true
+          VALIDATE_PYTHON: true
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_CSS: true
+          VALIDATE_HTML: true
