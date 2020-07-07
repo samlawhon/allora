@@ -28,22 +28,8 @@ class RoutesMap extends Component {
         fetch('/trails', requestOptions).then(response => response.json()).then(data => this.setState({trails: data}));
     }
 
-    getLatLng() {
-        const data = {
-            city_name: this.props.location,
-        }
-
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(data)
-        }
-
-        fetch('/lat-lng', requestOptions).then(response => response.json()).then(data => this.setState({latLng: data}));
-    }
-
     componentDidMount() {
         this.getTrails();
-        this.getLatLng();
     }
 
     render() {
@@ -52,7 +38,7 @@ class RoutesMap extends Component {
             <Container className="pt-4 pb-4">
                 <Row>
                     <Col sm="12" md="8">
-                        <Map latLng={this.state.latLng} trails={this.state.trails}/>
+                        <Map location={this.props.location} trails={this.state.trails}/>
                     </Col>
                     <Col sm="12" md="4">
                         <div className="routesList">
