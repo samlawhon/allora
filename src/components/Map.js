@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
 import './Map.css';
 
-const addTrailMarkers = ({name, latitude, longitude}) => (
-     <Marker position={[latitude, longitude]}>
+const addTrailMarkers = ({name, lat, lng}) => (
+     <Marker position={[lat, lng]}>
          <Popup>
             {name}
          </Popup>
@@ -12,10 +12,35 @@ const addTrailMarkers = ({name, latitude, longitude}) => (
 
 class Map extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            latLng: null
+        }
+    }
+
+    getLatLng() {
+        const data = {
+            city_name: this.props.location,
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            body: JSON.stringify(data)
+        }
+
+        fetch('/lat-lng', requestOptions).then(response => response.json()).then(data => this.setState({latLng: data}));
+    }
+    
+    componentDidMount() {
+        this.getLatLng();
+    }
+
     render() {
-        if (this.props.latLng!=null && this.props.trails!=null) {
-            const lat = this.props.latLng['lat'];
-            const lng = this.props.latLng['lng'];
+        if (this.state.latLng!=null && this.props.trails!=null && this.state.latLng['lat']!=undefined && this.state.latLng['lng']!=undefined) {
+            const lat = this.state.latLng['lat'];
+            const lng = this.state.latLng['lng'];
             return (
                 <div>
                     <LeafletMap

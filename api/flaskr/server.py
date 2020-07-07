@@ -29,11 +29,13 @@ def get_trails():
     Trails list API endpoint
     :return: list of nearby trails to a given lat and long
     """
-    coords_and_distance = request.get_json(force=True)
-    lat = coords_and_distance['lat']
-    lng = coords_and_distance['lng']
-    max_distance = coords_and_distance['distance']
+    name_and_distance = request.get_json(force=True)
+    city_name = name_and_distance['city_name']
+    max_distance = name_and_distance['distance']
+    lat_lng = geocode(city_name)
+    if lat_lng is None:
+        return '500'
     hiking_api = HikingApi()
-    trails = hiking_api.get_trails(lat, lng, max_distance)
+    trails = hiking_api.get_trails(lat_lng[0], lat_lng[1], max_distance)
     trails_dicts = [trail.as_dict() for trail in trails]
     return json.dumps(trails_dicts)

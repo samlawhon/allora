@@ -18,5 +18,7 @@ class HikingTrail:
         Convert to dict for use with JS on frontend
         '''
         return {'name': self.__dict__['name'],
+                'lat': self.__dict__['latitude'],
+                'lng': self.__dict__['longitude'],
                 'image': self.__dict__['imgMedium'],
                 'rating': self.__dict__['stars']}
