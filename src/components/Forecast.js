@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import './RoutePage.css';
+import './Forecast.css';
 
 class Forecast extends Component {
 
@@ -63,7 +64,7 @@ class Forecast extends Component {
     render() {
         if (this.state.weatherData!==null) {
             return(
-                <div>
+                <div className="forecastList">
                     { this.dayForecast(0) }
                     { this.dayForecast(1) }
                     { this.dayForecast(2) }
