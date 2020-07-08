@@ -38,7 +38,7 @@ class Map extends Component {
     }
 
     render() {
-        if (this.state.latLng!=null && this.props.trails!=null && this.state.latLng['lat']!=undefined && this.state.latLng['lng']!=undefined) {
+        if (this.state.latLng!=null && this.props.trails!==null && this.state.latLng['lat']!==undefined && this.state.latLng['lng']!==undefined) {
             const lat = this.state.latLng['lat'];
             const lng = this.state.latLng['lng'];
             return (

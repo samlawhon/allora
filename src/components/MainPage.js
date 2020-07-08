@@ -3,10 +3,6 @@ import './MainPage.css';
 
 class MainPage extends Component {
 
-    constructor(props) {
-        super(props);
-    } 
-
     render() {
         return (
             <div className="container" id="homepageBackground">

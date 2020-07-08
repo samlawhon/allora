@@ -8,6 +8,7 @@ from flask_migrate import Migrate
 from api import settings
 from api.flaskr.hiking import HikingApi
 from api.flaskr.geocoding_api import geocode
+from api.flaskr.weather import get_current_weather
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
@@ -20,6 +21,10 @@ from api.flaskr.model import TrailModel
 
 @app.route('/lat-lng', methods=['POST'])
 def lat_lng():
+    """
+    Geocoding API endpoint
+    :return: lat and long given a city name
+    """
     name = request.get_json(force=True)
     city_name = name['city_name']
     lat_lng = geocode(city_name)
@@ -46,3 +51,14 @@ def get_trails():
     trails = hiking_api.get_trails(lat_lng[0], lat_lng[1], max_distance)
     trails_dicts = [trail.as_dict() for trail in trails]
     return json.dumps(trails_dicts)
+
+@app.route('/weather', methods=['POST'])
+def get_weather():
+    """
+    Weather API endpoint
+    :return: weather forecast for a location given lat and long
+    """
+    lat_and_lng = request.get_json(force=True)
+    lat = lat_and_lng['lat']
+    lng = lat_and_lng['lng']
+    return get_current_weather(lat, lng)

@@ -15,13 +15,9 @@ const createRouteCard = ({image, name, rating}) => (
 
 class Routes extends Component {
 
-    constructor(props) {
-        super(props)
-    }
-
     render() {
-        if (this.props.trails!=null) {
-            if (this.props.trails!='500') {
+        if (this.props.trails!==null) {
+            if (this.props.trails!=='500') {
                 return (
                     <Container>
                         <Row>

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import RoutesMap from './components/RoutesMap';
 import NavigationBar from './components/NavigationBar';
@@ -18,8 +17,10 @@ class App extends Component {
     this.state = {
       location: null,
       havePlace: false,
-      route: null,
-      haveRoute: false
+      route: {
+        name: "Sloppy Half Marathon to Pretty Meadow"
+      },
+      haveRoute: true
     }
 
   }
@@ -59,7 +60,7 @@ render() {
         <NavigationBar/>
         <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler}/>
         <RoutesMap havePlace={this.state.havePlace} location={this.state.location}/>
-        <RoutePage/>
+        <RoutePage route={this.state.route}/>
       </div>
     );
   }

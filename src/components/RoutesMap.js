@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import Routes from './Routes'
-import Map from './Map'
+import Map from './TrailsMap'
 import './RoutesMap.css';
 
 class RoutesMap extends Component {

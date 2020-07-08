@@ -10,8 +10,9 @@ def get_current_weather(lat, lon):
     Method for getting weather at a location
     '''
     endpoint = "https://api.openweathermap.org/data/2.5/"
-    current_weather_endpoint = endpoint + "weather?"
-    payload = {'lat': str(lat), 'lon': str(lon), 'appid': OPEN_WEATHER_API_KEY}
+    current_weather_endpoint = endpoint + "onecall?"
+    payload = {'lat': str(lat), 'lon': str(lon), 'exclude': "current,minutely,hourly", 'appid': OPEN_WEATHER_API_KEY, 'units':'imperial'}
     response = requests.get(current_weather_endpoint, payload)
     current_weather_data = response.json()
-    return current_weather_data['weather']
+    return current_weather_data
+    
