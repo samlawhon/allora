@@ -1,5 +1,10 @@
 .App {
+<<<<<<< HEAD
   text-align: left;
+=======
+  text-align: center;
+  background-color: #c1deda;
+>>>>>>> d6b39b6f... Spruced route page up a bit
 }
 
 .App-logo {
