@@ -5,7 +5,8 @@ class Routes extends Component {
 
     createRouteCard = ({image, name, summary, maxElev, lat, lng}) => (
         <Col xs="12">
-            <Card data-img_link={image} data-name={name} data-maxelev={maxElev} data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect}>
+            <Card data-img_link={image} data-name={name} data-maxelev={maxElev} 
+            data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect} className="m-4">
                 <CardImg src={image}/>
                 <CardBody>
                     <CardTitle>{name}</CardTitle>

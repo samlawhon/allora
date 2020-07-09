@@ -42,9 +42,13 @@ class NavigationBar extends Component {
     }
 
     render() {
+        var navColor = "white";
+        if (this.props.currentScrollHeight<520) {
+            navColor = "transparent";
+        }
         return (
-            <Container>
-                <Navbar color="transparent" light expand="md" fixed="top">
+            <div>
+                <Navbar color={navColor} light expand="md" fixed="top" className="pl-5 pr-5">
                     <NavbarBrand href="/" className="mr-auto font-weight-bold"><h1 className="appName">Eldora</h1></NavbarBrand>
                     <NavbarToggler onClick={this.toggle}/>
                     <Collapse isOpen={this.state.isOpen} navbar>
@@ -53,7 +57,7 @@ class NavigationBar extends Component {
                         </Nav>
                     </Collapse> 
                 </Navbar>
-            </Container>
+            </div>
         );
     }
 }

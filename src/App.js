@@ -4,7 +4,6 @@ import RoutesMap from './components/RoutesMap';
 import NavigationBar from './components/NavigationBar';
 import MainPage from './components/MainPage';
 import RoutePage from './components/RoutePage';
-import OpeningBanner from './components/OpeningBanner';
 
 class App extends Component {
 
@@ -26,10 +25,17 @@ class App extends Component {
         lng: null,
         maxElev: null
       },
-      haveRoute: false
+      haveRoute: false,
+      currentScrollHeight: 1
     }
 
   }
+
+  componentDidMount() {
+    window.onscroll = () => {
+        this.setState({currentScrollHeight: window.scrollY});
+    }
+}
 
   changeHandler(event) {
     event.preventDefault();
@@ -60,17 +66,18 @@ render() {
   if (!this.state.havePlace) {
     return (
       <div className="App">
-        <NavigationBar/>
-        <OpeningBanner/>
-        <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler}/>
+        <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
+        <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
+        <br/>
       </div>
     );
   }
   else if (!this.state.haveRoute) {
     return (
       <div className="App">
-        <NavigationBar/>
-        <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler}/>
+        <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
+        <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
+        <br/>
         <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
       </div>
     );
@@ -80,9 +87,11 @@ render() {
     console.log(this.state.route);
     return (
       <div className="App">
-        <NavigationBar/>
-        <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler}/>
+        <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
+        <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
+        <br/>
         <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
+        <br/>
         <RoutePage route={this.state.route}/>
       </div>
     );

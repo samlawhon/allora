@@ -2,15 +2,7 @@ import React, {Component} from 'react'
 import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
 import './Map.css';
 
-const addTrailMarkers = ({name, lat, lng}) => (
-     <Marker position={[lat, lng]}>
-         <Popup>
-            {name}
-         </Popup>
-     </Marker>   
-    )
-
-class Map extends Component {
+class TrailsMap extends Component {
 
     constructor(props) {
         super(props);
@@ -19,6 +11,15 @@ class Map extends Component {
             latLng: null
         }
     }
+
+    addTrailMarkers = ({image, maxElev, name, lat, lng}) => (
+        <Marker position={[lat, lng]} data-img_link={image} data-name={name} data-maxelev={maxElev} 
+        data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect}>
+            <Popup>
+               {name}
+            </Popup>
+        </Marker>   
+       )
 
     getLatLng() {
         const data = {
@@ -54,6 +55,7 @@ class Map extends Component {
                         dragging={true}
                         animate={true}
                         easeLinearity={0.35}
+                        className="m-4"
                     >
                         <TileLayer
                         url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -63,7 +65,7 @@ class Map extends Component {
                             Home!
                         </Popup>
                         </Marker>
-                        {this.props.trails.map(addTrailMarkers)}
+                        {this.props.trails.map(this.addTrailMarkers)}
                     </LeafletMap>
                 </div>
             );
@@ -76,4 +78,4 @@ class Map extends Component {
     }
 }
 
-export default Map
+export default TrailsMap

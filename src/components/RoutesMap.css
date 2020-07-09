@@ -1,4 +1,9 @@
 
+.routes-map-header {
+  color: #053c5e;
+  border-top: 3px solid #095d42;
+}
+
 .routesList {
   height: 500px;
   overflow-y: auto;
