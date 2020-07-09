@@ -28,11 +28,26 @@ class Forecast extends Component {
         fetch('/weather', requestOptions).then(response => response.json()).then(data => this.setState({weatherData: data}));
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.lat!==nextProps.lat && this.props.lng!==nextProps.lng) {
+            const data = {
+                lat: nextProps.lat,
+                lng: nextProps.lng
+            }
+    
+            const requestOptions = {
+                method: 'POST',
+                body: JSON.stringify(data)
+            }
+    
+            fetch('/weather', requestOptions).then(response => response.json()).then(data => this.setState({weatherData: data}));
+        }
+    }
+
     dayForecast(n) {
         const d = new Date();
         const today = (d.getDay() + n)%7;
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        console.log(this.state.weatherData);
         const mainDescription = this.state.weatherData['daily'][n]['weather'][0]['main'];
         const icon = this.state.weatherData['daily'][n]['weather'][0]['icon'];
         const iconAddress = "http://openweathermap.org/img/wn/" + icon + "@2x.png";

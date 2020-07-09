@@ -19,12 +19,12 @@ def calculate_distance(x1, y1, x2, y2):
 def find_closest_station(lat, lon):
 
     QUERY = (
-        'SELECT usaf, wban, name, lat, lon, elev FROM `bigquery-public-data.noaa_gsod.stations` '
-        'WHERE lat>39.9614-0.5 '
-        'AND lat<39.9614+0.5 '
-        'AND lon>-105.5108-0.5 '
-        'AND lon<-105.5108+0.5 ')
-    query_job = client.query(QUERY)  # API request
+        'SELECT usaf, wban, begin, `end`, name, lat, lon, elev FROM `bigquery-public-data.noaa_gsod.stations` '
+        'WHERE lat>{lat}-1 '
+        'AND lat<{lat}+1 '
+        'AND lon>{lon}-1 '
+        'AND lon<{lon}+1 ')
+    query_job = client.query(QUERY.format(lat=lat, lon=lon))  # API request
     rows = query_job.result()  # Waits for query to finish
 
     closest = " "
@@ -38,7 +38,7 @@ def find_closest_station(lat, lon):
         current_lat = row.lat
         current_lon = row.lon
         current_dist = calculate_distance(lat, lon, current_lat, current_lon)
-        if (current_dist<closest_dist):
+        if (current_dist<closest_dist and int(row.end[0:4])==2020 and int(row.begin[0:4])<=2010):
             closest = row.name
             closest_wban = row.wban
             closest_usaf = row.usaf
@@ -56,43 +56,40 @@ def find_coldest_weather(day, month, wban, usaf):
         'SELECT MIN(min), '
         'FROM ( '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2020` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2020` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2019` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2019` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2018` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2018` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2017` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2017` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2016` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2016` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2015` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2015` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2014` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2014` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2013` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2013` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2012` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2012` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2011` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2011` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         'UNION ALL '
         'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2010` where da="{day}" and mo="{month}" and wban="94075" and stn="999999" '
+        'FROM `bigquery-public-data.noaa_gsod.gsod2010` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
         ')'
     )
-    query_job = client.query(QUERY.format(day=day, month=month))  # API request
+    query_job = client.query(QUERY.format(day=day, month=month, wban=wban, usaf=usaf))  # API request
     rows = query_job.result()  # Waits for query to finish
     for row in rows:
         return row.f0_
-
-closest_station = find_closest_station(39.9614, -105.5108)
-print(find_coldest_weather("06", "07", closest_station['wban'], closest_station['usaf']))

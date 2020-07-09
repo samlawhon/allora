@@ -9,6 +9,7 @@ from api import settings
 from api.flaskr.hiking import HikingApi
 from api.flaskr.geocoding_api import geocode
 from api.flaskr.weather import get_current_weather
+from api.flaskr.cold_weather import find_closest_station, find_coldest_weather
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
@@ -62,3 +63,25 @@ def get_weather():
     lat = lat_and_lng['lat']
     lng = lat_and_lng['lng']
     return get_current_weather(lat, lng)
+
+@app.route('/coldest-weather', methods=['POST'])
+def get_cold_weather():
+    """
+    Coldest weather API endpoint
+    :return: coldest weather in the past 10 years, adjusted for altitude, for a given lat and long
+    """
+    FEET_PER_METER = 3.28084
+    lat_lng_day_month_maxElev = request.get_json(force=True)
+    lat = lat_lng_day_month_maxElev['lat']
+    lng = lat_lng_day_month_maxElev['lng']
+    day = lat_lng_day_month_maxElev['day']
+    month = lat_lng_day_month_maxElev['month']
+    elev = lat_lng_day_month_maxElev['maxElev']
+    closest_station = find_closest_station(float(lat), float(lng))
+    day_formatted = "{:02d}".format(day)
+    month_formatted = "{:02d}".format(month)
+    coldest_weather = find_coldest_weather(day_formatted, month_formatted, closest_station['wban'], closest_station['usaf'])
+    altitude_adjustment = ((float(elev)-float(closest_station['elevation'])*FEET_PER_METER)/1000)*3.5
+    coldest_weather -= altitude_adjustment
+    return json.dumps(round(coldest_weather))
+

@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
 import { Container, Row, Col, Card, CardImg, CardBody, CardTitle, CardText} from 'reactstrap';
 
-const createRouteCard = ({image, name, rating}) => (
-    <Col xs="12">
-        <Card>
-            <CardImg src={image}/>
-            <CardBody>
-                <CardTitle>{name}</CardTitle>
-                <CardText>{rating}</CardText>
-            </CardBody>
-        </Card>
-    </Col>
-)
-
 class Routes extends Component {
+
+    createRouteCard = ({image, name, summary, maxElev, lat, lng}) => (
+        <Col xs="12">
+            <Card data-img_link={image} data-name={name} data-maxelev={maxElev} data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect}>
+                <CardImg src={image}/>
+                <CardBody>
+                    <CardTitle>{name}</CardTitle>
+                    <CardText>{summary}</CardText>
+                </CardBody>
+            </Card>
+        </Col>
+    )
 
     render() {
         if (this.props.trails!==null) {
@@ -21,7 +21,7 @@ class Routes extends Component {
                 return (
                     <Container>
                         <Row>
-                            {this.props.trails.map(createRouteCard)}
+                            {this.props.trails.map(this.createRouteCard)}
                         </Row>
                     </Container>
                 );

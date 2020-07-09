@@ -8,7 +8,9 @@ import { Collapse,
     Nav,
     NavItem,
     NavLink,
+    Container
 } from 'reactstrap';
+import './NavigationBar.css';
 
 const links =  [
     { id: 0, href:"/how-it-works", text: "How it works" },
@@ -17,7 +19,7 @@ const links =  [
 
 const createNavItem = ({href, text, className}) => (
     <NavItem>
-        <NavLink href={href} className={className}>{text}</NavLink>
+        <NavLink href={href} className={className}><h5 className="navItem">{text}</h5></NavLink>
     </NavItem>
 )
 
@@ -41,9 +43,9 @@ class NavigationBar extends Component {
 
     render() {
         return (
-            <div>
-                <Navbar color="light" light expand="md">
-                    <NavbarBrand href="/" className="mr-auto">Eldora</NavbarBrand>
+            <Container>
+                <Navbar color="transparent" light expand="md" fixed="top">
+                    <NavbarBrand href="/" className="mr-auto font-weight-bold"><h1 className="appName">Eldora</h1></NavbarBrand>
                     <NavbarToggler onClick={this.toggle}/>
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
@@ -51,7 +53,7 @@ class NavigationBar extends Component {
                         </Nav>
                     </Collapse> 
                 </Navbar>
-            </div>
+            </Container>
         );
     }
 }

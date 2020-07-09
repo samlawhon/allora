@@ -4,6 +4,7 @@ import RoutesMap from './components/RoutesMap';
 import NavigationBar from './components/NavigationBar';
 import MainPage from './components/MainPage';
 import RoutePage from './components/RoutePage';
+import OpeningBanner from './components/OpeningBanner';
 
 class App extends Component {
 
@@ -11,16 +12,21 @@ class App extends Component {
 
     super(props);
 
-    this.changeHandler = this.changeHandler.bind(this)
-    this.submitHandler = this.submitHandler.bind(this)
+    this.changeHandler = this.changeHandler.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
+    this.handleRouteSelect = this.handleRouteSelect.bind(this);
 
     this.state = {
       location: null,
       havePlace: false,
       route: {
-        name: "Sloppy Half Marathon to Pretty Meadow"
+        name: null,
+        img_link: null,
+        lat: null,
+        lng: null,
+        maxElev: null
       },
-      haveRoute: true
+      haveRoute: false
     }
 
   }
@@ -33,7 +39,21 @@ class App extends Component {
 
   submitHandler(event) {
     event.preventDefault();
-    this.setState({havePlace: true})
+    this.setState({havePlace: true});
+  }
+
+  handleRouteSelect(event) {
+    event.preventDefault();
+    this.setState({
+      route : {
+        name: event.currentTarget.dataset.name,
+        img_link: event.currentTarget.dataset.img_link,
+        maxElev: event.currentTarget.dataset.maxelev,
+        lat: event.currentTarget.dataset.lat,
+        lng: event.currentTarget.dataset.lng,
+      },
+      haveRoute: true
+    });
   }
 
 render() {
@@ -41,6 +61,7 @@ render() {
     return (
       <div className="App">
         <NavigationBar/>
+        <OpeningBanner/>
         <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler}/>
       </div>
     );
@@ -50,16 +71,18 @@ render() {
       <div className="App">
         <NavigationBar/>
         <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler}/>
-        <RoutesMap havePlace={this.state.havePlace} location={this.state.location}/>
+        <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
       </div>
     );
   }
   else {
+    console.log("App: ");
+    console.log(this.state.route);
     return (
       <div className="App">
         <NavigationBar/>
         <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler}/>
-        <RoutesMap havePlace={this.state.havePlace} location={this.state.location}/>
+        <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
         <RoutePage route={this.state.route}/>
       </div>
     );

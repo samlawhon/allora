@@ -1,27 +1,24 @@
 
 #homepageBackground {
-  background: url(https://images.unsplash.com/photo-1443996104801-80c82e789b18?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1053&q=80);
-  height: 750px;
+  background-image: url(https://images.unsplash.com/photo-1491904768633-2b7e3e7fede5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80);
   min-width: 100%;
-  background-size: cover;
+  height: 600px;
   background-position: center;
-  text-align: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: left;
+}
+
+.main-header {
+  color: #053c5e;
+}
+
+.main-sub-header {
+  color: #095d42;
 }
 
 #mainHeading {
   color: rgba(255, 255, 255, 0.8);
-}
-
-#map {
-  height: 300px;
-}
-
-#homeCenter {
-  padding-top: 22%;
-}
-
-hr {
-  width: 400px;
 }
 
 #mainQuestion {
