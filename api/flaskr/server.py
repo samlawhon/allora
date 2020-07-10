@@ -9,6 +9,7 @@ from api.flaskr.geocoding_api import geocode
 
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
 app.config.from_object(__name__)
 
 @app.route('/lat-lng', methods=['POST'])
