@@ -1,9 +1,6 @@
-from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
-from flask_migrate import Migrate # pylint: disable=import-error
 from geoalchemy2 import Geography # pylint: disable=import-error
-from app.flaskr.server import app # pylint: disable=import-error
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+from app.flaskr.server import db # pylint: disable=import-error
+
 
 class TrailModel(db.Model):
     __tablename__ = 'trails'

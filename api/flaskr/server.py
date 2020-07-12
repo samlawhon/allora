@@ -3,6 +3,8 @@ Main server routes
 """
 import json
 from flask import Flask, render_template, request # pylint: disable=import-error
+from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
+from flask_migrate import Migrate # pylint: disable=import-error
 from api import settings
 from api.flaskr.hiking import HikingApi
 from api.flaskr.geocoding_api import geocode
@@ -11,6 +13,8 @@ from api.flaskr.geocoding_api import geocode
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
 app.config.from_object(__name__)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 @app.route('/lat-lng', methods=['POST'])
 def lat_lng():
