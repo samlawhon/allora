@@ -1,5 +1,5 @@
 from geoalchemy2 import Geography # pylint: disable=import-error
-from app.flaskr.server import db # pylint: disable=import-error
+from api.flaskr.server import db # pylint: disable=import-error
 
 
 class TrailModel(db.Model):
