@@ -25,36 +25,36 @@ class RoutePage extends Component {
     }
 
     render() {
-        console.log("Route Page: ");
-        console.log(this.props.route);
         return (
             <Container>
-                <div className="RoutePageHeadings">
-                    <h1>{this.props.route.name}</h1>
+                <div className="RoutePageHeadings pt-4 pb-4">
+                    <h1 className="display-4 font-weight-bold">{this.props.route.name}</h1>
                 </div>
                 <Row className="mb-3">
-                    <Col sm="12" md="7">
-                        <img className="img-fluid" src={this.props.route.img_link}/>
+                    <Col sm="12" md="6">
+                        <img className="img-fluid route-image" src={this.props.route.img_link}/>
                     </Col>
-                    <Col sm="12" md="5">
+                    <Col sm="12" md="6">
                         <TrailMap lat={this.props.route.lat} lng={this.props.route.lng}/>
                     </Col>
                 </Row>
+                <br/>
                 <Row>
                     <Col sm="12">
-                        <h1 className="RoutePageHeadings">Weather</h1>
+                        <h1 className="RoutePageHeadings pt-4 pb-4 font-weight-bold">Weather</h1>
                         <Row>
                             <Col sm="12" md="6">
-                                <h3 className="RoutePageSubHeadings">Forecast</h3>
+                                <h3 className="RoutePageSubHeadings pb-2">Forecast</h3>
                                 <Forecast lat={this.props.route.lat} lng={this.props.route.lng}/>
                             </Col>
                             <Col sm="12" md="6">
-                                <h3 className="RoutePageSubHeadings">Realistic Bad Weather Case</h3>
+                                <h3 className="RoutePageSubHeadings pb-2">Realistic Bad Weather Case</h3>
                                 <BadWeatherCase lat={this.props.route.lat} lng={this.props.route.lng} day={this.day()} month={this.month()} maxElev={this.props.route.maxElev}/>
                             </Col>
                         </Row>
                     </Col>
                 </Row>
+                <br/>
             </Container>
         );
     }

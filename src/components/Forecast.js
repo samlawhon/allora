@@ -79,7 +79,7 @@ class Forecast extends Component {
     render() {
         if (this.state.weatherData!==null) {
             return(
-                <div className="forecastList">
+                <div className="forecastList pt-2">
                     { this.dayForecast(0) }
                     { this.dayForecast(1) }
                     { this.dayForecast(2) }

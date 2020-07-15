@@ -35,7 +35,8 @@ class RoutesMap extends Component {
     render() {
         return (
             <Container className="pt-4 pb-4">
-                <h1 className="display-3 font-weight-bold routes-map-header pt-2 pb-2">Choose your trail</h1>
+                <h1 className="display-3 font-weight-bold routes-map-header">Choose your trail</h1>
+                <br/>
                 <Row>
                     <Col sm="12" lg="6">
                         <TrailsMap location={this.props.location} handleRouteSelect={this.props.handleRouteSelect} trails={this.state.trails}/>

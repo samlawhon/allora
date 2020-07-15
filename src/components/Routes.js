@@ -1,18 +1,21 @@
 import React, {Component} from 'react';
-import { Container, Row, Col, Card, CardImg, CardBody, CardTitle, CardText} from 'reactstrap';
+import { Container, Row, Col, Media} from 'reactstrap';
+import './RoutesMap.css'
 
 class Routes extends Component {
 
     createRouteCard = ({image, name, summary, maxElev, lat, lng}) => (
         <Col xs="12">
-            <Card data-img_link={image} data-name={name} data-maxelev={maxElev} 
-            data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect} className="m-4">
-                <CardImg src={image}/>
-                <CardBody>
-                    <CardTitle>{name}</CardTitle>
-                    <CardText>{summary}</CardText>
-                </CardBody>
-            </Card>
+            <Media data-img_link={image} data-name={name} data-maxelev={maxElev} 
+            data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect} className="mb-4 route-card rounded p-1">
+                <Media left>
+                    <Media object src={image} className="route-small-image" />
+                </Media>
+                <Media body className="pl-3">
+                    <Media heading>{name}</Media>
+                    {summary}
+                </Media>
+            </Media>
         </Col>
     )
 

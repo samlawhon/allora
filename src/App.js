@@ -62,41 +62,39 @@ class App extends Component {
     });
   }
 
-render() {
-  if (!this.state.havePlace) {
-    return (
-      <div className="App">
-        <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
-        <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
-        <br/>
-      </div>
-    );
+  render() {
+    if (!this.state.havePlace) {
+      return (
+        <div className="App">
+          <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
+          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
+          <br/>
+        </div>
+      );
+    }
+    else if (!this.state.haveRoute) {
+      return (
+        <div className="App">
+          <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
+          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
+          <br/>
+          <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className="App">
+          <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
+          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
+          <br/>
+          <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
+          <br/>
+          <RoutePage route={this.state.route}/>
+        </div>
+      );
+    }
   }
-  else if (!this.state.haveRoute) {
-    return (
-      <div className="App">
-        <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
-        <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
-        <br/>
-        <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
-      </div>
-    );
-  }
-  else {
-    console.log("App: ");
-    console.log(this.state.route);
-    return (
-      <div className="App">
-        <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
-        <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
-        <br/>
-        <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
-        <br/>
-        <RoutePage route={this.state.route}/>
-      </div>
-    );
-  }
-}
 }
   
 

@@ -20,6 +20,7 @@ class TrailMap extends Component {
                     dragging={true}
                     animate={true}
                     easeLinearity={0.35}
+                    className="trail-map"
                 >
                     <TileLayer
                     url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'

@@ -1,8 +1,14 @@
 .RoutePageHeadings {
     text-align: left;
     border-top: 3px solid #095d42;
+    color: #053c5e;
   }
 
 .RoutePageSubHeadings {
     text-align: left;
+}
+
+.route-image {
+  min-height: 400px;
+  width: auto;
 }
