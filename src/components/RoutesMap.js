@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Container, Row, Col } from 'reactstrap';
-import Routes from './Routes'
-import Map from './Map'
+import Routes from './Routes';
+import TrailsMap from './TrailsMap';
 import './RoutesMap.css';
 
 class RoutesMap extends Component {
@@ -33,16 +33,17 @@ class RoutesMap extends Component {
     }
 
     render() {
-
         return (
             <Container className="pt-4 pb-4">
+                <h1 className="display-3 font-weight-bold routes-map-header">Choose your trail</h1>
+                <br/>
                 <Row>
-                    <Col sm="12" md="8">
-                        <Map location={this.props.location} trails={this.state.trails}/>
+                    <Col sm="12" lg="6">
+                        <TrailsMap location={this.props.location} handleRouteSelect={this.props.handleRouteSelect} trails={this.state.trails}/>
                     </Col>
-                    <Col sm="12" md="4">
+                    <Col sm="12" lg="6">
                         <div className="routesList">
-                            <Routes trails={this.state.trails}/>
+                            <Routes trails={this.state.trails} handleRouteSelect={this.props.handleRouteSelect}/>
                         </div>
                     </Col>
                 </Row>

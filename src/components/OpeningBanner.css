@@ -1,0 +1,11 @@
+
+#homepageBackground {
+    background-image: url(/opening-banner-image.png);
+    min-width: 100%;
+    height: 600px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    text-align: left;
+  }

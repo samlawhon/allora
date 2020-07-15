@@ -1,5 +1,26 @@
 
+.routes-map-header {
+  color: #053c5e;
+  border-top: 3px solid #095d42;
+}
+
 .routesList {
   height: 500px;
   overflow-y: auto;
+}
+
+.route-card {
+  cursor: pointer;
+  min-height: 150px;
+}
+
+.route-card:hover {
+  cursor: pointer;
+  border: 3px solid #053c5e;
+  min-height: 150px;
+}
+
+.route-small-image {
+  width: 200px;
+  height: 150px;
 }
