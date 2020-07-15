@@ -1,5 +1,5 @@
 import os
-from dotenv import load_dotenv # pylint: disable=import-error
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -8,3 +8,4 @@ HIKING_PROJECT_API_KEY = os.getenv("HIKING_PROJECT_API")
 STRAVA_API_KEY = os.getenv("STRAVA_API")
 MAPQUEST_API_KEY = os.getenv("MAPQUEST_API")
 GOOGLE_APPLICATION_CREDENTIALS = 'api/GOOGLE_APPLICATION_CREDENTIALS.json'
+DATABASE_CONNECTION_STING = os.getenv("DATABASE_CONNECTION_STING")

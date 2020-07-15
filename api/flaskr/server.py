@@ -2,14 +2,21 @@
 Main server routes
 """
 import json
-from flask import Flask, render_template, request # pylint: disable=import-error
+from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from api import settings
 from api.flaskr.hiking import HikingApi
 from api.flaskr.geocoding_api import geocode
 
-
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config.from_object(__name__)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+from api.flaskr.model import TrailModel
 
 @app.route('/lat-lng', methods=['POST'])
 def lat_lng():
