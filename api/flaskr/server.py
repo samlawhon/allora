@@ -2,9 +2,9 @@
 Main server routes
 """
 import json
-from flask import Flask, render_template, request # pylint: disable=import-error
-from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
-from flask_migrate import Migrate # pylint: disable=import-error
+from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from api import settings
 from api.flaskr.hiking import HikingApi
 from api.flaskr.geocoding_api import geocode
