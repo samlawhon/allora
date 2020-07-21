@@ -1,17 +1,17 @@
 """empty message
 
-Revision ID: 80349f751d69
+Revision ID: 101a83d34ec4
 Revises: 
-Create Date: 2020-07-12 16:38:13.868432
+Create Date: 2020-07-20 21:11:05.340072
 
 """
 from alembic import op
 import sqlalchemy as sa
-import geoalchemy2
+from geoalchemy2.types import Geography
 
 
 # revision identifiers, used by Alembic.
-revision = '80349f751d69'
+revision = '101a83d34ec4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,7 @@ def upgrade():
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('rating', sa.Integer(), nullable=True),
     sa.Column('url', sa.String(), nullable=True),
-    sa.Column('route', geoalchemy2.types.Geography(geometry_type='MULTILINESTRING', from_text='ST_GeogFromText', name='geography'), nullable=True),
+    sa.Column('route', Geography(geometry_type='MULTILINESTRING', from_text='ST_GeogFromText', name='geography'), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
