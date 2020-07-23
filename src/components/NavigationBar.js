@@ -47,7 +47,7 @@ class NavigationBar extends Component {
             navColor = "transparent";
         }
         return (
-            <div>
+            <Container>
                 <Navbar color={navColor} light expand="md" fixed="top" className="pl-5 pr-5">
                     <NavbarBrand href="/" className="mr-auto font-weight-bold"><h1 className="appName">Eldora</h1></NavbarBrand>
                     <NavbarToggler onClick={this.toggle}/>
@@ -57,7 +57,7 @@ class NavigationBar extends Component {
                         </Nav>
                     </Collapse> 
                 </Navbar>
-            </div>
+            </Container>
         );
     }
 }

@@ -25,6 +25,8 @@ class RoutePage extends Component {
     }
 
     render() {
+        console.log("Route Page: ");
+        console.log(this.props.route);
         return (
             <Container>
                 <div className="RoutePageHeadings pt-4 pb-4">
