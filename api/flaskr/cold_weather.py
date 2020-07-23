@@ -3,15 +3,18 @@ from google.cloud import bigquery
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
-credentials = service_account.Credentials.from_service_account_file(
-    "api/GOOGLE_APPLICATION_CREDENTIALS.json",
-    scopes=["https://www.googleapis.com/auth/cloud-platform"],
-)
+try:
+    credentials = service_account.Credentials.from_service_account_file(
+        "api/GOOGLE_APPLICATION_CREDENTIALS.json",
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
 
-client = bigquery.Client(
-    credentials=credentials,
-    project=credentials.project_id,
-)
+    client = bigquery.Client(
+        credentials=credentials,
+        project=credentials.project_id,
+    )
+except FileNotFoundError:
+    print("Error loading Google big query")
 
 def calculate_distance(x1, y1, x2, y2):
     return math.sqrt((x2-x1)**2+(y2-y1)**2)
