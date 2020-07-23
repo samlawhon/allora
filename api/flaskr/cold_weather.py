@@ -49,7 +49,7 @@ def find_closest_station(lat, lon):
             closest_lon = row.lon
             closest_elev = row.elev
             closest_dist = current_dist
-
+    print(closest)
     return {'name': closest, 'wban': closest_wban, 'usaf':closest_usaf, 'latitude': closest_lat, 
     'longitude':closest_lon, 'elevation':closest_elev, 'distance':closest_dist}
 
@@ -94,5 +94,6 @@ def find_coldest_weather(day, month, wban, usaf):
     )
     query_job = client.query(QUERY.format(day=day, month=month, wban=wban, usaf=usaf))  # API request
     rows = query_job.result()  # Waits for query to finish
+    print(rows)
     for row in rows:
         return row.f0_
