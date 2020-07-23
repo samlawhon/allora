@@ -1,8 +1,4 @@
 .forecastList {
-<<<<<<< HEAD
   max-height: 400px;
-=======
-  height: 400px;
->>>>>>> 94191e4a... Finishing adding weather forecast + historical, on to website redesign
   overflow-y: auto;
 }

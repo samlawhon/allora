@@ -8,7 +8,6 @@ import SearchForm from './SearchForm';
 class MainPage extends Component {
 
     render() {
-        const opacity = 75/Math.max(this.props.currentScrollHeight, 0.01);
         return (
             <div>
                 <OpeningBanner currentScrollHeight={this.props.currentScrollHeight}/>

@@ -79,11 +79,7 @@ class Forecast extends Component {
     render() {
         if (this.state.weatherData!==null) {
             return(
-<<<<<<< HEAD
                 <div className="forecastList pt-2">
-=======
-                <div className="forecastList">
->>>>>>> d6b39b6f... Spruced route page up a bit
                     { this.dayForecast(0) }
                     { this.dayForecast(1) }
                     { this.dayForecast(2) }

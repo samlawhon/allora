@@ -6,7 +6,6 @@ class Routes extends Component {
 
     createRouteCard = ({image, name, summary, maxElev, lat, lng}) => (
         <Col xs="12">
-<<<<<<< HEAD
             <Media data-img_link={image} data-name={name} data-maxelev={maxElev} 
             data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect} className="mb-4 route-card rounded p-1">
                 <Media left>
@@ -17,16 +16,6 @@ class Routes extends Component {
                     {summary}
                 </Media>
             </Media>
-=======
-            <Card data-img_link={image} data-name={name} data-maxelev={maxElev} 
-            data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect} className="m-4">
-                <CardImg src={image}/>
-                <CardBody>
-                    <CardTitle>{name}</CardTitle>
-                    <CardText>{summary}</CardText>
-                </CardBody>
-            </Card>
->>>>>>> 6ac461bd... Made website prettier
         </Col>
     )
 
