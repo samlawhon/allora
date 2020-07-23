@@ -4,7 +4,6 @@ import RoutesMap from './components/RoutesMap';
 import NavigationBar from './components/NavigationBar';
 import MainPage from './components/MainPage';
 import RoutePage from './components/RoutePage';
-import OpeningBanner from './components/OpeningBanner';
 
 class App extends Component {
 
