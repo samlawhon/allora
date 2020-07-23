@@ -2,6 +2,7 @@
 Main server routes
 """
 import json
+import os
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -16,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config.from_object(__name__)
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, directory=os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'migrations')))
 
 from api.flaskr.model import TrailModel
 
