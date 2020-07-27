@@ -82,7 +82,6 @@ def get_cold_weather():
     day_formatted = "{:02d}".format(day)
     month_formatted = "{:02d}".format(month)
     coldest_weather = find_coldest_weather(day_formatted, month_formatted, closest_station['wban'], closest_station['usaf'])
-    print(coldest_weather)
     altitude_adjustment = ((float(elev)-float(closest_station['elevation'])*FEET_PER_METER)/1000)*3.5
     coldest_weather -= altitude_adjustment
     return json.dumps(round(coldest_weather))

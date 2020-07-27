@@ -14,7 +14,6 @@ try:
         project=credentials.project_id,
     )
 except FileNotFoundError:
-    print("Error loading Google big query")
 
 def calculate_distance(x1, y1, x2, y2):
     return math.sqrt((x2-x1)**2+(y2-y1)**2)
@@ -94,6 +93,5 @@ def find_coldest_weather(day, month, wban, usaf):
     )
     query_job = client.query(QUERY.format(day=day, month=month, wban=wban, usaf=usaf))  # API request
     rows = query_job.result()  # Waits for query to finish
-    print(rows)
     for row in rows:
         return row.f0_
