@@ -5,7 +5,7 @@ from google.oauth2 import service_account
 
 try:
     credentials = service_account.Credentials.from_service_account_file(
-        "api/GOOGLE_APPLICATION_CREDENTIALS.json",
+        "GOOGLE_APPLICATION_CREDENTIALS.json",
         scopes=["https://www.googleapis.com/auth/cloud-platform"],
     )
 
@@ -49,7 +49,6 @@ def find_closest_station(lat, lon):
             closest_lon = row.lon
             closest_elev = row.elev
             closest_dist = current_dist
-
     return {'name': closest, 'wban': closest_wban, 'usaf':closest_usaf, 'latitude': closest_lat, 
     'longitude':closest_lon, 'elevation':closest_elev, 'distance':closest_dist}
 
