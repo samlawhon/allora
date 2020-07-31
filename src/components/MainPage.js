@@ -22,7 +22,7 @@ class MainPage extends Component {
                             <SearchForm changeHandler={ this.props.changeHandler } submitHandler={ this.props.submitHandler }/>
                         </Col>
                         <Col sm="12" md="7" className="mt-5 pl-5">
-                            <DateForm/>
+                            <DateForm handleDayClick={this.props.handleDayClick} from={this.props.from} to={this.props.to}/>
                         </Col>
                     </Row>
                 </Container>
