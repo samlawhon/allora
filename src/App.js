@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { DateUtils } from 'react-day-picker'
 import './App.css';
 import RoutesMap from './components/RoutesMap';
 import NavigationBar from './components/NavigationBar';
@@ -14,6 +15,7 @@ class App extends Component {
     this.changeHandler = this.changeHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
     this.handleRouteSelect = this.handleRouteSelect.bind(this);
+    this.handleDayClick = this.handleDayClick.bind(this);
 
     this.state = {
       location: null,
@@ -26,7 +28,9 @@ class App extends Component {
         maxElev: null
       },
       haveRoute: false,
-      currentScrollHeight: 1
+      currentScrollHeight: 1,
+      from: null,
+      to: null
     }
 
   }
@@ -35,7 +39,12 @@ class App extends Component {
     window.onscroll = () => {
         this.setState({currentScrollHeight: window.scrollY});
     }
-}
+  }
+
+  handleDayClick(day){
+    const range = DateUtils.addDayToRange(day, this.state);
+    this.setState(range);
+  }
 
   changeHandler(event) {
     event.preventDefault();
@@ -67,7 +76,7 @@ class App extends Component {
       return (
         <div className="App">
           <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
-          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
+          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight} handleDayClick={this.handleDayClick} from={this.state.from} to={this.state.to}/>
           <br/>
         </div>
       );
@@ -76,7 +85,7 @@ class App extends Component {
       return (
         <div className="App">
           <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
-          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
+          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight} handleDayClick={this.handleDayClick} from={this.state.from} to={this.state.to}/>
           <br/>
           <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
         </div>
@@ -86,11 +95,11 @@ class App extends Component {
       return (
         <div className="App">
           <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
-          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight}/>
+          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight} handleDayClick={this.handleDayClick} from={this.state.from} to={this.state.to}/>
           <br/>
           <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
           <br/>
-          <RoutePage route={this.state.route}/>
+          <RoutePage route={this.state.route} from={this.state.from} to={this.state.to}/>
         </div>
       );
     }

@@ -10,6 +10,23 @@ class RoutePage extends Component {
     
     constructor(props) {
         super(props);
+
+        this.state = {
+            months: {
+                "Jan": 1,
+                "Feb": 2,
+                "Mar": 3,
+                "Apr": 4,
+                "May": 5,
+                "Jun": 6,
+                "Jul": 7,
+                "Aug": 8,
+                "Sep": 9,
+                "Oct": 10,
+                "Nov": 11,
+                "Dec": 12
+            }
+        }
     }
     
     day() {
@@ -24,7 +41,40 @@ class RoutePage extends Component {
         return mo+1;
     }
 
+    getDate(from, to) {
+        let fromDay = null;
+        let fromMonth = null;
+        if (from) {
+            fromDay = Number(String(from).slice(8, 10));
+            fromMonth = this.state.months[String(from).slice(4, 7)];
+        }
+        let toDay = null;
+        let toMonth = null;
+        if (to) {
+            toDay = Number(String(to).slice(8, 10));
+            toMonth = this.state.months[String(to).slice(4, 7)];
+        }
+        let day = this.day();
+        let month = this.month();
+        if (fromDay && fromMonth) {
+            day = fromDay;
+            month = fromMonth;
+        }
+        if ((toDay && toMonth) && (fromDay && fromMonth)) {
+            if (fromMonth <= 7) {
+                day = fromDay;
+                month = fromMonth;
+            }
+            else {
+                day = toDay;
+                month = toMonth;
+            }
+        }
+        return { day, month };
+    }
+
     render() {
+        const { day, month } = this.getDate(this.props.from, this.props.to);
         return (
             <Container>
                 <div className="RoutePageHeadings pt-4 pb-4">
@@ -49,7 +99,7 @@ class RoutePage extends Component {
                             </Col>
                             <Col sm="12" md="6">
                                 <h3 className="RoutePageSubHeadings pb-2">Realistic Bad Weather Case</h3>
-                                <BadWeatherCase lat={this.props.route.lat} lng={this.props.route.lng} day={this.day()} month={this.month()} maxElev={this.props.route.maxElev}/>
+                                <BadWeatherCase lat={this.props.route.lat} lng={this.props.route.lng} day={day} month={month} maxElev={this.props.route.maxElev}/>
                             </Col>
                         </Row>
                     </Col>

@@ -12,7 +12,9 @@
     "leaflet": "^1.6.0",
     "popper.js": "^1.16.1",
     "react": "^16.13.1",
+    "react-day-picker": "^7.4.8",
     "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
     "react-leaflet": "^2.7.0",
     "react-popper": "^2.2.3",
     "react-scripts": "3.4.1",
@@ -43,7 +45,6 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
-    "eslint": "^7.4.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",

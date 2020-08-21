@@ -4,11 +4,13 @@ import { Card, CardBody, CardTitle, CardText, Container, Row, Col } from 'reacts
 import TrailsMap from './TrailsMap';
 import OpeningBanner from './OpeningBanner';
 import SearchForm from './SearchForm';
+import DateForm from './DateForm';
 
 class MainPage extends Component {
 
     render() {
-        const opacity = 75/Math.max(this.props.currentScrollHeight, 0.01);
+        const startingOpacity = 75;
+        const opacity = startingOpacity/Math.max(this.props.currentScrollHeight, 0.01);
         return (
             <div>
                 <OpeningBanner currentScrollHeight={this.props.currentScrollHeight}/>
@@ -16,11 +18,11 @@ class MainPage extends Component {
                 <Container>
                     <h1 className="display-3 font-weight-bold main-header">Plan your next adventure</h1>
                     <Row>
-                        <Col sm="12" md="6" className="mt-5 pr-5">
+                        <Col sm="12" md="5" className="mt-5 pr-5">
                             <SearchForm changeHandler={ this.props.changeHandler } submitHandler={ this.props.submitHandler }/>
                         </Col>
-                        <Col sm="12" md="6" className="mt-5 pl-5">
-                            <h3 className="font-weight-bold main-sub-header">Other Options</h3>
+                        <Col sm="12" md="7" className="mt-5 pl-5">
+                            <DateForm handleDayClick={this.props.handleDayClick} from={this.props.from} to={this.props.to}/>
                         </Col>
                     </Row>
                 </Container>
