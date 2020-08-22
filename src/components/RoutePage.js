@@ -42,26 +42,18 @@ class RoutePage extends Component {
     }
 
     getDate(from, to) {
-        let fromDay = null;
-        let fromMonth = null;
-        if (from) {
-            fromDay = Number(String(from).slice(8, 10));
-            fromMonth = this.state.months[String(from).slice(4, 7)];
-        }
-        let toDay = null;
-        let toMonth = null;
-        if (to) {
-            toDay = Number(String(to).slice(8, 10));
-            toMonth = this.state.months[String(to).slice(4, 7)];
-        }
         let day = this.day();
         let month = this.month();
-        if (fromDay && fromMonth) {
-            day = fromDay;
-            month = fromMonth;
-        }
-        if ((toDay && toMonth) && (fromDay && fromMonth)) {
-            if (fromMonth <= 7) {
+        if (from && to) {
+            let fromDay = Number(String(from).slice(8, 10));
+            let fromMonth = this.state.months[String(from).slice(4, 7)];
+            let toDay = Number(String(to).slice(8, 10));
+            let toMonth = this.state.months[String(to).slice(4, 7)];
+            let mid_year = 7;
+            /* if the month of the start of the trip is prior to middle of the year, 
+            use the start of the trip date (when it will be coldest) for the worst case weather analysis,
+            otherwise use the end of the trip date (when it will be coldest). */
+            if (fromMonth <= mid_year) {
                 day = fromDay;
                 month = fromMonth;
             }
@@ -69,6 +61,10 @@ class RoutePage extends Component {
                 day = toDay;
                 month = toMonth;
             }
+        }
+        else if (from) {
+            day = Number(String(from).slice(8, 10));
+            month = this.state.months[String(from).slice(4, 7)];
         }
         return { day, month };
     }
