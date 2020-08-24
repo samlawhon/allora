@@ -34,7 +34,7 @@ def lat_lng():
     if lat_lng is None:
         return '500'
     else:
-        lat_lng_dict = { 'lat':lat_lng[0], 'lng':lat_lng[1] }
+        lat_lng_dict = { 'lat':lat_lng[0], 'lon':lat_lng[1] }
         return json.dumps(lat_lng_dict)
 
 
@@ -42,7 +42,7 @@ def lat_lng():
 def get_trails():
     """
     Trails list API endpoint
-    :return: list of nearby trails to a given lat and long
+    :return: list of nearby trails to a given lat and lon
     """
     name_and_distance = request.get_json(force=True)
     city_name = name_and_distance['city_name']

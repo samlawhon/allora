@@ -14,7 +14,7 @@ class RoutesPage extends Component {
                 lon: null
             },
             trails: null,
-            trail_coords: null
+            trailCoords: null
         }
     }
 
@@ -47,7 +47,7 @@ class RoutesPage extends Component {
     getTrailCoords() {
         const payload = {
             lat: this.state.coords.lat,
-            lon: this.state.coords.lng,
+            lon: this.state.coords.lon,
             height_from_center: 0.08339811181,
             width_from_center: 0.1357841492
         }
@@ -55,8 +55,7 @@ class RoutesPage extends Component {
             method: 'POST',
             body: JSON.stringify(payload)
         }
-        console.log(payload);
-        fetch('/trail-coords', requestOptions).then(response => response.json()).then(data => this.setState({trail_coords: data}));
+        fetch('/trail-coords', requestOptions).then(response => response.json()).then(data => this.setState({trailCoords: data}));
     }
 
     componentDidMount() {
@@ -65,13 +64,21 @@ class RoutesPage extends Component {
     }
 
     render() {
+        console.log(this.state.trailCoords);
+        console.log(this.state.trails);
         return (
             <Container className="pt-4 pb-4">
                 <h1 className="display-3 font-weight-bold routes-map-header">Choose your trail</h1>
                 <br/>
                 <Row>
                     <Col sm="12" lg="6">
-                        <RoutesMap location={this.props.location} handleRouteSelect={this.props.handleRouteSelect} trails={this.state.trails}/>
+                        <RoutesMap 
+                            location={this.props.location} 
+                            handleRouteSelect={this.props.handleRouteSelect} 
+                            trails={this.state.trails} 
+                            trailCoords={this.state.trailCoords}
+                            coords={this.state.coords}
+                            />
                     </Col>
                     <Col sm="12" lg="6">
                         <div className="routesList">

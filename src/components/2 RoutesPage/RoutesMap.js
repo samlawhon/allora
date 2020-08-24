@@ -1,53 +1,36 @@
 import React, {Component} from 'react'
-import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Map as LeafletMap, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import './RoutesMap.css';
-import { Path } from 'leaflet';
 
 class RoutesMap extends Component {
 
-    constructor(props) {
-        super(props);
+    // addTrailMarkers = ({image, maxElev, name, lat, lng}) => (
+    //     <Marker position={[lat, lng]} data-img_link={image} data-name={name} data-maxelev={maxElev} 
+    //     data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect}>
+    //         <Popup>
+    //            {name}
+    //         </Popup>
+    //     </Marker>   
+    // )
 
-        this.state = {
-            latLng: null
-        }
-    }
-
-    addTrailMarkers = ({image, maxElev, name, lat, lng}) => (
-        <Marker position={[lat, lng]} data-img_link={image} data-name={name} data-maxelev={maxElev} 
-        data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect}>
+    addRoutes = (routeName) => (
+        <Polyline color="blue" positions={this.props.trailCoords[routeName]}>
             <Popup>
-               {name}
+                {routeName}
             </Popup>
-        </Marker>   
-       )
-
-    getLatLng() {
-        const data = {
-            city_name: this.props.location,
-        }
-
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(data)
-        }
-
-        fetch('/lat-lng', requestOptions).then(response => response.json()).then(data => this.setState({latLng: data}));
-    }
-    
-    componentDidMount() {
-        this.getLatLng();
-    }
+        </Polyline>
+    )
 
     render() {
-        if (this.state.latLng!=null && this.props.trails!==null && this.state.latLng['lat']!==undefined && this.state.latLng['lng']!==undefined) {
-            const lat = this.state.latLng['lat'];
-            const lng = this.state.latLng['lng'];
+        if (this.props.coords!==null && this.props.trailCoords!==null && this.props.trails!==null) {
+            const lat = this.props.coords['lat'];
+            const lon = this.props.coords['lon'];
+            console.log(Object.keys(this.props.trailCoords).map(this.addRoutes));
             return (
                 <div>
                     <LeafletMap
-                        center={[lat, lng]}
-                        zoom={10}
+                        center={[lat, lon]}
+                        zoom={11}
                         maxZoom={20}
                         attributionControl={true}
                         zoomControl={false}
@@ -64,12 +47,13 @@ class RoutesMap extends Component {
                         url='http://ows.mundialis.de/services/service?'
                         layers='TOPO-OSM-WMS'
                         />
-                        <Marker position={[lat, lng]}>
+                        <Marker position={[lat, lon]}>
                         <Popup>
                             Home!
                         </Popup>
                         </Marker>
-                        {this.props.trails.map(this.addTrailMarkers)}
+                        {Object.keys(this.props.trailCoords).map(this.addRoutes)}
+                        {/* {this.props.trails.map(this.addTrailMarkers)} */}
                     </LeafletMap>
                 </div>
             );

@@ -77,7 +77,7 @@ class RouteSelectPage extends Component {
                 </div>
                 <Row className="mb-3">
                     <Col sm="12" md="6">
-                        <img className="img-fluid route-image" src={this.props.route.img_link}/>
+                        <img className="img-fluid route-image" src={this.props.route.img_link} alt=""/>
                     </Col>
                     <Col sm="12" md="6">
                         <RouteSelectMap lat={this.props.route.lat} lng={this.props.route.lng}/>

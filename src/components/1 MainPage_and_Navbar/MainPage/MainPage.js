@@ -8,8 +8,6 @@ import DateForm from './DateForm';
 class MainPage extends Component {
 
     render() {
-        const startingOpacity = 75;
-        const opacity = startingOpacity/Math.max(this.props.currentScrollHeight, 0.01);
         return (
             <div>
                 <OpeningBanner currentScrollHeight={this.props.currentScrollHeight}/>

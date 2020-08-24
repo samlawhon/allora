@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { DateUtils } from 'react-day-picker'
 import './App.css';
-import NavigationBar from './components/MainPage_and_Navbar/NavigationBar';
-import MainPage from './components/MainPage_and_Navbar/MainPage/MainPage';
+import NavigationBar from './components/1 MainPage_and_Navbar/NavigationBar';
+import MainPage from './components/1 MainPage_and_Navbar/MainPage/MainPage';
 import RoutesPage from './components/2 RoutesPage/RoutesPage';
 import RouteSelectPage from './components/3 RouteSelectPage/RouteSelectPage';
 

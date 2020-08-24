@@ -30,7 +30,7 @@ class BadWeatherCase extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.lat!==nextProps.lat && this.props.lng!=nextProps.lng) {
+        if (this.props.lat!==nextProps.lat && this.props.lng!==nextProps.lng) {
             const data = {
                 lat: nextProps.lat,
                 lng: nextProps.lng,
@@ -53,7 +53,7 @@ class BadWeatherCase extends Component {
             return (
                 <div>
                     <h5>Prepare for extreme cold, with temperatures as low as {this.state.lowest_temp}</h5>
-                    <img className="img-fluid" src="https://images.unsplash.com/photo-1502809027077-657ca9c746af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"/>
+                    <img className="img-fluid" src="https://images.unsplash.com/photo-1502809027077-657ca9c746af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80" alt="People hiking in extreme cold"/>
                 </div>
             );
         }
@@ -61,7 +61,7 @@ class BadWeatherCase extends Component {
             return (
                 <div>
                     <h5>Prepare for cold temperatures as low as {this.state.lowest_temp}</h5>
-                    <img className="img-fluid" src="https://images.unsplash.com/photo-1516573454759-d43e4d43dce9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"/>
+                    <img className="img-fluid" src="https://images.unsplash.com/photo-1516573454759-d43e4d43dce9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80" alt="People hiking in the cold"/>
                 </div>
             );
         }
@@ -69,7 +69,7 @@ class BadWeatherCase extends Component {
             return (
                 <div>
                     <h5>Prepare for chilly temperatures as low as {this.state.lowest_temp}</h5>
-                    <img className="img-fluid" src="https://images.unsplash.com/photo-1536105761318-666e135000d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"/>
+                    <img className="img-fluid" src="https://images.unsplash.com/photo-1536105761318-666e135000d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80" alt="People hiking in chilly, windy weather"/>
                 </div>
             );
         }
@@ -77,7 +77,7 @@ class BadWeatherCase extends Component {
             return (
                 <div>
                     <h5>Prepare for temperatures as cool as {this.state.lowest_temp}</h5>
-                    <img className="img-fluid" src="https://images.unsplash.com/photo-1521860253737-a33db0898cc5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"/>
+                    <img className="img-fluid" src="https://images.unsplash.com/photo-1521860253737-a33db0898cc5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80" alt="People hiking in cool weather"/>
                 </div>
             );
         }
