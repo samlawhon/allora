@@ -3,8 +3,8 @@ import { DateUtils } from 'react-day-picker'
 import './App.css';
 import NavigationBar from './components/MainPage_and_Navbar/NavigationBar';
 import MainPage from './components/MainPage_and_Navbar/MainPage/MainPage';
-import RoutesPage from './components/RoutesPage/RoutesPage';
-import RouteSelectPage from './components/RouteSelectPage/RouteSelectPage';
+import RoutesPage from './components/2 RoutesPage/RoutesPage';
+import RouteSelectPage from './components/3 RouteSelectPage/RouteSelectPage';
 
 class App extends Component {
 
