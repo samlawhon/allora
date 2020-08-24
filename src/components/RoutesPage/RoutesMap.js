@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
-import './Map.css';
+import './RoutesMap.css';
 import { Path } from 'leaflet';
 
-class TrailsMap extends Component {
+class RoutesMap extends Component {
 
     constructor(props) {
         super(props);
@@ -98,4 +98,4 @@ class TrailsMap extends Component {
     }
 }
 
-export default TrailsMap
+export default RoutesMap

@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
-import './TrailMap.css';
+import './RouteSelectMap.css';
 
-class TrailMap extends Component {
+class RouteSelectMap extends Component {
 
     render() {
         const lat = this.props.lat;
@@ -37,4 +37,4 @@ class TrailMap extends Component {
     }
 }
 
-export default TrailMap
+export default RouteSelectMap

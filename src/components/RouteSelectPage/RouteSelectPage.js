@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import './RoutePage.css';
 import { Container, Row, Col } from 'reactstrap';
-import './TrailMap';
-import TrailMap from './TrailMap';
+import './RouteSelectPage.css';
+import RouteSelectMap from './RouteSelectMap';
 import Forecast from './Forecast';
 import BadWeatherCase from './BadWeatherCase';
 
-class RoutePage extends Component {
+class RouteSelectPage extends Component {
     
     constructor(props) {
         super(props);
@@ -81,7 +80,7 @@ class RoutePage extends Component {
                         <img className="img-fluid route-image" src={this.props.route.img_link}/>
                     </Col>
                     <Col sm="12" md="6">
-                        <TrailMap lat={this.props.route.lat} lng={this.props.route.lng}/>
+                        <RouteSelectMap lat={this.props.route.lat} lng={this.props.route.lng}/>
                     </Col>
                 </Row>
                 <br/>
@@ -107,4 +106,4 @@ class RoutePage extends Component {
     
 }
 
-export default RoutePage;
+export default RouteSelectPage;

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import { DateUtils } from 'react-day-picker'
 import './App.css';
-import RoutesMap from './components/RoutesMap';
-import NavigationBar from './components/NavigationBar';
-import MainPage from './components/MainPage';
-import RoutePage from './components/RoutePage';
+import NavigationBar from './components/MainPage_and_Navbar/NavigationBar';
+import MainPage from './components/MainPage_and_Navbar/MainPage/MainPage';
+import RoutesPage from './components/RoutesPage/RoutesPage';
+import RouteSelectPage from './components/RouteSelectPage/RouteSelectPage';
 
 class App extends Component {
 
@@ -87,7 +87,7 @@ class App extends Component {
           <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
           <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight} handleDayClick={this.handleDayClick} from={this.state.from} to={this.state.to}/>
           <br/>
-          <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
+          <RoutesPage havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
         </div>
       );
     }
@@ -97,9 +97,9 @@ class App extends Component {
           <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
           <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight} handleDayClick={this.handleDayClick} from={this.state.from} to={this.state.to}/>
           <br/>
-          <RoutesMap havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
+          <RoutesPage havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
           <br/>
-          <RoutePage route={this.state.route} from={this.state.from} to={this.state.to}/>
+          <RouteSelectPage route={this.state.route} from={this.state.from} to={this.state.to}/>
         </div>
       );
     }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './MainPage.css';
-import { Card, CardBody, CardTitle, CardText, Container, Row, Col } from 'reactstrap';
-import TrailsMap from './TrailsMap';
+import { Container, Row, Col } from 'reactstrap';
 import OpeningBanner from './OpeningBanner';
 import SearchForm from './SearchForm';
 import DateForm from './DateForm';
@@ -30,12 +29,5 @@ class MainPage extends Component {
         );
     }
 }
-
-{/*
-    Date of trip
-    Activity type
-    Distance from destination
-    Topo
-*/}
 
 export default MainPage;

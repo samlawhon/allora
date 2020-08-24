@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import { Container, Row, Col } from 'reactstrap';
-import Routes from './Routes';
-import TrailsMap from './TrailsMap';
+import RoutesList from './RoutesList';
+import RoutesMap from './RoutesMap';
 import './RoutesMap.css';
 
-class RoutesMap extends Component {
+class RoutesPage extends Component {
 
     constructor(props) {
         super(props);
@@ -71,11 +71,11 @@ class RoutesMap extends Component {
                 <br/>
                 <Row>
                     <Col sm="12" lg="6">
-                        <TrailsMap location={this.props.location} handleRouteSelect={this.props.handleRouteSelect} trails={this.state.trails}/>
+                        <RoutesMap location={this.props.location} handleRouteSelect={this.props.handleRouteSelect} trails={this.state.trails}/>
                     </Col>
                     <Col sm="12" lg="6">
                         <div className="routesList">
-                            <Routes trails={this.state.trails} handleRouteSelect={this.props.handleRouteSelect}/>
+                            <RoutesList trails={this.state.trails} handleRouteSelect={this.props.handleRouteSelect}/>
                         </div>
                     </Col>
                 </Row>
@@ -84,4 +84,4 @@ class RoutesMap extends Component {
     }
 }
 
-export default RoutesMap;
+export default RoutesPage;

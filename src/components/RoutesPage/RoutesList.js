@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import { Container, Row, Col, Media} from 'reactstrap';
 import './RoutesMap.css'
+import './RoutesPage.css'
 
-class Routes extends Component {
+class RoutesList extends Component {
 
     createRouteCard = ({image, name, summary, maxElev, lat, lng}) => (
         <Col xs="12">
@@ -42,4 +43,4 @@ class Routes extends Component {
     }
 }
 
-export default Routes;
+export default RoutesList;
