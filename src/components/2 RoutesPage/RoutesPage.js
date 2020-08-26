@@ -64,8 +64,6 @@ class RoutesPage extends Component {
     }
 
     render() {
-        console.log(this.state.trailCoords);
-        console.log(this.state.trails);
         return (
             <Container className="pt-4 pb-4">
                 <h1 className="display-3 font-weight-bold routes-map-header">Choose your trail</h1>

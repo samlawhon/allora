@@ -11,12 +11,13 @@
 
 .route-card {
   cursor: pointer;
+  border: 4px solid white;
   min-height: 150px;
 }
 
 .route-card:hover {
   cursor: pointer;
-  border: 3px solid #053c5e;
+  border: 4px solid #053c5e;
   min-height: 150px;
 }
 

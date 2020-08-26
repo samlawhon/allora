@@ -14,7 +14,13 @@ class RoutesMap extends Component {
     // )
 
     addRoutes = (routeName) => (
-        <Polyline color="blue" positions={this.props.trailCoords[routeName]}>
+        <Polyline 
+            weight="3" 
+            color="blue" 
+            onmouseover={(event) => {event.target.setStyle({weight: 6})}} 
+            onmouseout={(event) => {event.target.setStyle({weight: 3})}}
+            positions={this.props.trailCoords[routeName]}
+            >
             <Popup>
                 {routeName}
             </Popup>
@@ -25,12 +31,11 @@ class RoutesMap extends Component {
         if (this.props.coords!==null && this.props.trailCoords!==null && this.props.trails!==null) {
             const lat = this.props.coords['lat'];
             const lon = this.props.coords['lon'];
-            console.log(Object.keys(this.props.trailCoords).map(this.addRoutes));
             return (
                 <div>
                     <LeafletMap
                         center={[lat, lon]}
-                        zoom={11}
+                        zoom={12}
                         maxZoom={20}
                         attributionControl={true}
                         zoomControl={false}
