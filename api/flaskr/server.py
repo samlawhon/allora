@@ -11,6 +11,7 @@ from api.flaskr.hiking import HikingApi
 from api.flaskr.geocoding_api import geocode
 from api.flaskr.weather import get_current_weather
 from api.flaskr.cold_weather import find_closest_station, find_coldest_weather
+from api.flaskr.geodata import generate_trails
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
@@ -33,7 +34,7 @@ def lat_lng():
     if lat_lng is None:
         return '500'
     else:
-        lat_lng_dict = { 'lat':lat_lng[0], 'lng':lat_lng[1] }
+        lat_lng_dict = { 'lat':lat_lng[0], 'lon':lat_lng[1] }
         return json.dumps(lat_lng_dict)
 
 
@@ -41,7 +42,7 @@ def lat_lng():
 def get_trails():
     """
     Trails list API endpoint
-    :return: list of nearby trails to a given lat and long
+    :return: list of nearby trails to a given lat and lon
     """
     name_and_distance = request.get_json(force=True)
     city_name = name_and_distance['city_name']
@@ -53,6 +54,20 @@ def get_trails():
     trails = hiking_api.get_trails(lat_lng[0], lat_lng[1], max_distance)
     trails_dicts = [trail.as_dict() for trail in trails]
     return json.dumps(trails_dicts)
+
+@app.route('/trail-coords', methods=['POST'])
+def get_trail_coords():
+    """
+    Trail coordinates API endpoint
+    :return: map of trail names to a list of coordinates
+    """
+    payload = request.get_json(force=True)
+    lat = payload["lat"]
+    lon = payload["lon"]
+    height_from_center = payload["height_from_center"]
+    width_from_center = payload["width_from_center"]
+    trails = generate_trails(lat, lon, height_from_center, width_from_center)
+    return json.dumps(trails)
 
 @app.route('/weather', methods=['POST'])
 def get_weather():

@@ -20,12 +20,10 @@ def generate_trails(lat, lon, height_from_center, width_from_center):
         out;
         """)
 
-    output = {}
+    trails = {}
 
     for way in results.ways:
-        node_list = []
-        for node in way.nodes:
-            node_list.append((node.lat, node.lon))
-        output[way.tags.get('name')] = node_list
+        node_list = [[float(node.lat), float(node.lon)] for node in way.nodes]
+        trails[way.tags.get('name')] = node_list
     
-    return output
+    return trails

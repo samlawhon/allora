@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Container, Row, Col } from 'reactstrap';
-import './RoutePage.css';
+import './RouteSelectPage.css';
 import './Forecast.css';
 
 class Forecast extends Component {
@@ -58,7 +58,7 @@ class Forecast extends Component {
                 <h5>{ days[today] }</h5>
                 <Row>
                     <Col sm="12" md="4">
-                        <img className="img-fluid" src={ iconAddress }/>
+                        <img className="img-fluid" src={ iconAddress } alt=""/>
                     </Col>
                     <Col sm="12" md="8" className="d-flex justify-content-center">
                         <Row>
