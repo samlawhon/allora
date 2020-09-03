@@ -28,7 +28,7 @@ def generate_trails(lat, lon, height_from_center, width_from_center):
     trails = {}
 
     for way in results.ways:
-        node_list = [[float(node.lat), float(node.lon)] for node in way.nodes]
+        node_list = [{"lat":float(node.lat), "lng":float(node.lon)} for node in way.nodes]
         trails[way.tags.get('name')] = node_list
     
     return trails
