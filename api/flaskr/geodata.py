@@ -15,7 +15,12 @@ def generate_trails(lat, lon, height_from_center, width_from_center):
 
     # fetch all named paths in the specified bounding box
     results = api.query(f"""
-        way({southern_edge},{western_edge},{northern_edge},{eastern_edge})[highway=path][name~\".\"];
+        (way({southern_edge},{western_edge},{northern_edge},{eastern_edge})[highway=path][sac_scale=hiking];
+         way({southern_edge},{western_edge},{northern_edge},{eastern_edge})[highway=path][sac_scale=mountain_hiking];
+         way({southern_edge},{western_edge},{northern_edge},{eastern_edge})[highway=path][sac_scale=demanding_mountain_hiking];
+         way({southern_edge},{western_edge},{northern_edge},{eastern_edge})[highway=path][sac_scale=alpine_hiking];
+         way({southern_edge},{western_edge},{northern_edge},{eastern_edge})[highway=path][sac_scale=demanding_alpine_hiking];
+         way({southern_edge},{western_edge},{northern_edge},{eastern_edge})[highway=path][sac_scale=difficult_alpine_hiking]; );
         (._;>;);
         out;
         """)
@@ -23,7 +28,7 @@ def generate_trails(lat, lon, height_from_center, width_from_center):
     trails = {}
 
     for way in results.ways:
-        node_list = [[float(node.lat), float(node.lon)] for node in way.nodes]
+        node_list = [{"lat":float(node.lat), "lng":float(node.lon)} for node in way.nodes]
         trails[way.tags.get('name')] = node_list
     
     return trails

@@ -1,4 +1,13 @@
 .leaflet-container {
-  height: 500px;
+  height: 550px;
   width: auto;
+  border: 4px solid white;
+}
+
+.refresh-trails {
+  text-align: left;
+}
+
+.drawing-controls {
+  text-align: right;
 }
