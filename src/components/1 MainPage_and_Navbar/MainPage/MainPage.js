@@ -9,8 +9,8 @@ class MainPage extends Component {
 
     render() {
         return (
-            <div>
-                <OpeningBanner currentScrollHeight={this.props.currentScrollHeight}/>
+            <div id="main-page">
+                <OpeningBanner/>
                 <br/>
                 <Container>
                     <h1 className="display-3 font-weight-bold main-header">Plan your next adventure</h1>

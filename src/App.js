@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { DateUtils } from 'react-day-picker'
 import './App.css';
 import NavigationBar from './components/1 MainPage_and_Navbar/NavigationBar';
@@ -28,18 +28,12 @@ class App extends Component {
         maxElev: null
       },
       haveRoute: false,
-      currentScrollHeight: 1,
       from: null,
       to: null
     }
 
   }
 
-  componentDidMount() {
-    window.onscroll = () => {
-        this.setState({currentScrollHeight: window.scrollY});
-    }
-  }
 
   handleDayClick(day){
     const range = DateUtils.addDayToRange(day, this.state);
@@ -49,12 +43,32 @@ class App extends Component {
   changeHandler(event) {
     event.preventDefault();
     this.setState({location: event.target.value});
-    this.setState({havePlace: false});
+    this.setState({
+      havePlace: false,
+      route: {
+        name: null,
+        img_link: null,
+        lat: null,
+        lng: null,
+        maxElev: null
+      },
+      haveRoute: false,
+    });
   }
 
   submitHandler(event) {
     event.preventDefault();
     this.setState({havePlace: true});
+    setTimeout(() => {
+      let navbar = document.getElementsByClassName("navbar")[0];
+      let mainPage = document.getElementById("main-page");
+      let scrollOptions = {
+        top: mainPage.scrollHeight - navbar.scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      }
+      window.scroll(scrollOptions);
+    }, 500);
   }
 
   handleRouteSelect(event) {
@@ -69,14 +83,31 @@ class App extends Component {
       },
       haveRoute: true
     });
+    setTimeout(() => {
+      let navbar = document.getElementsByClassName("navbar")[0];
+      let mainPage = document.getElementById("main-page");
+      let routesPage = document.getElementById("routes-page");
+      let scrollOptions = {
+        top: mainPage.scrollHeight + routesPage.scrollHeight - navbar.scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      }
+      window.scroll(scrollOptions);
+    }, 500);
   }
 
   render() {
     if (!this.state.havePlace) {
       return (
         <div className="App">
-          <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
-          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight} handleDayClick={this.handleDayClick} from={this.state.from} to={this.state.to}/>
+          <NavigationBar/>
+          <MainPage 
+          changeHandler={this.changeHandler} 
+          submitHandler={this.submitHandler} 
+          handleDayClick={this.handleDayClick} 
+          from={this.state.from} 
+          to={this.state.to}
+          />
           <br/>
         </div>
       );
@@ -84,22 +115,46 @@ class App extends Component {
     else if (!this.state.haveRoute) {
       return (
         <div className="App">
-          <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
-          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight} handleDayClick={this.handleDayClick} from={this.state.from} to={this.state.to}/>
+          <NavigationBar/>
+          <MainPage 
+          changeHandler={this.changeHandler} 
+          submitHandler={this.submitHandler} 
+          handleDayClick={this.handleDayClick} 
+          from={this.state.from} 
+          to={this.state.to}
+          />
           <br/>
-          <RoutesPage havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
+          <RoutesPage 
+          havePlace={this.state.havePlace} 
+          location={this.state.location} 
+          handleRouteSelect={this.handleRouteSelect}
+          />
         </div>
       );
     }
     else {
       return (
         <div className="App">
-          <NavigationBar currentScrollHeight={this.state.currentScrollHeight}/>
-          <MainPage changeHandler={this.changeHandler} submitHandler={this.submitHandler} currentScrollHeight={this.state.currentScrollHeight} handleDayClick={this.handleDayClick} from={this.state.from} to={this.state.to}/>
+          <NavigationBar/>
+          <MainPage 
+          changeHandler={this.changeHandler} 
+          submitHandler={this.submitHandler} 
+          handleDayClick={this.handleDayClick} 
+          from={this.state.from} 
+          to={this.state.to}
+          />
           <br/>
-          <RoutesPage havePlace={this.state.havePlace} location={this.state.location} handleRouteSelect={this.handleRouteSelect}/>
+          <RoutesPage 
+          havePlace={this.state.havePlace} 
+          location={this.state.location} 
+          handleRouteSelect={this.handleRouteSelect}
+          />
           <br/>
-          <RouteSelectPage route={this.state.route} from={this.state.from} to={this.state.to}/>
+          <RouteSelectPage 
+          route={this.state.route} 
+          from={this.state.from} 
+          to={this.state.to}
+          />
         </div>
       );
     }

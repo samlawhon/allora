@@ -5,16 +5,15 @@ import './RoutesPage.css'
 
 class RoutesList extends Component {
 
-    createRouteCard = ({image, name, summary, maxElev, lat, lng}) => (
+    createRouteCard = ({image, name, maxElev, lat, lng}) => (
         <Col xs="12">
-            <Media data-img_link={image} data-name={name} data-maxelev={maxElev} 
-            data-lat={lat} data-lng={lng} onClick={this.props.handleRouteSelect} className="mb-4 route-card rounded p-1">
+            <Media data-img_link={image} data-name={name} data-maxelev={maxElev} id={name}
+            data-lat={lat} data-lng={lng} onClick={this.props.handleTrailheadSelect} className="mb-4 route-card rounded p-1">
                 <Media left>
                     <Media object src={image} className="route-small-image" />
                 </Media>
                 <Media body className="pl-3">
                     <Media heading>{name}</Media>
-                    {summary}
                 </Media>
             </Media>
         </Col>
