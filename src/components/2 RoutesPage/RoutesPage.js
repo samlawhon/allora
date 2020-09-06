@@ -10,6 +10,7 @@ class RoutesPage extends Component {
         super(props);
 
         this.resetTrailCoords = this.resetTrailCoords.bind(this);
+        this.handleTrailheadSelect = this.handleTrailheadSelect.bind(this);
 
         this.HEIGHT_FROM_CENTER = 0.10;       // represents about 14 miles from top to bottom
         this.WIDTH_FROM_CENTER = 0.15;        // represents about 16 miles from side to side
@@ -21,8 +22,28 @@ class RoutesPage extends Component {
             },
             trails: null,
             trailCoords: null,
-            mapZoom: 12
+            mapZoom: 12,
+            marker: null
         }
+    }
+
+    handleTrailheadSelect(event) {
+        let newViewport = {
+            lat: Number(event.currentTarget.dataset.lat),
+            lon: Number(event.currentTarget.dataset.lng),
+            zoom: this.state.mapZoom
+        }
+        this.resetTrailCoords(newViewport);
+        this.setState({
+            coords: {
+                lat: Number(event.currentTarget.dataset.lat),
+                lon: Number(event.currentTarget.dataset.lng)
+            },
+            marker: {
+                lat: Number(event.currentTarget.dataset.lat),
+                lon: Number(event.currentTarget.dataset.lng)
+            }
+        });
     }
 
     getTrails() {
@@ -96,24 +117,30 @@ class RoutesPage extends Component {
 
     render() {
         return (
-            <Container className="pt-4 pb-4">
+            <Container className="pt-4 pb-4" id="routes-page">
                 <h1 className="display-3 font-weight-bold routes-map-header">Choose your trail</h1>
                 <br/>
                 <Row>
                     <Col sm="12" lg="8">
                         <RoutesMap 
-                            location={this.props.location} 
-                            handleRouteSelect={this.props.handleRouteSelect}
-                            resetTrailCoords={this.resetTrailCoords} 
-                            trails={this.state.trails} 
-                            trailCoords={this.state.trailCoords}
-                            coords={this.state.coords}
-                            mapZoom={this.state.mapZoom}
-                            />
+                        location={this.props.location} 
+                        handleRouteSelect={this.props.handleRouteSelect}
+                        resetTrailCoords={this.resetTrailCoords} 
+                        trails={this.state.trails} 
+                        trailCoords={this.state.trailCoords}
+                        coords={this.state.coords}
+                        mapZoom={this.state.mapZoom}
+                        marker={this.state.marker}
+                        />
                     </Col>
                     <Col sm="12" lg="4">
+                        <h4>Popular trail heads on Hiking Project</h4>
                         <div className="routesList">
-                            <RoutesList trails={this.state.trails} handleRouteSelect={this.props.handleRouteSelect}/>
+                            <RoutesList 
+                            trails={this.state.trails} 
+                            handleRouteSelect={this.props.handleRouteSelect}
+                            handleTrailheadSelect={this.handleTrailheadSelect}
+                            />
                         </div>
                     </Col>
                 </Row>
