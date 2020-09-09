@@ -5,10 +5,15 @@ import './RoutesPage.css'
 
 class RoutesList extends Component {
 
-    createRouteCard = ({image, name, maxElev, lat, lng}) => (
+    createRouteCard = ({image, name, lat, lng}) => (
         <Col xs="12">
-            <Media data-img_link={image} data-name={name} data-maxelev={maxElev} id={name}
-            data-lat={lat} data-lng={lng} onClick={this.props.handleTrailheadSelect} className="mb-4 route-card rounded p-1">
+            <Media 
+            id={name}
+            data-lat={lat} 
+            data-lng={lng} 
+            onClick={this.props.handleTrailheadSelect} 
+            className="mb-4 route-card rounded p-1"
+            >
                 <Media left>
                     <Media object src={image} className="route-small-image" />
                 </Media>
@@ -20,12 +25,12 @@ class RoutesList extends Component {
     )
 
     render() {
-        if (this.props.trails!==null) {
-            if (this.props.trails!=='500') {
+        if (this.props.trailheads!==null) {
+            if (this.props.trailheads!=='500') {
                 return (
                     <Container>
                         <Row>
-                            {this.props.trails.map(this.createRouteCard)}
+                            {this.props.trailheads.map(this.createRouteCard)}
                         </Row>
                     </Container>
                 );

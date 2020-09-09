@@ -12,6 +12,7 @@ from api.flaskr.geocoding_api import geocode
 from api.flaskr.weather import get_current_weather
 from api.flaskr.cold_weather import find_closest_station, find_coldest_weather
 from api.flaskr.geodata import generate_trails
+from api.flaskr.elevation import get_elevation, process_elevation
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
@@ -38,7 +39,7 @@ def lat_lng():
         return json.dumps(lat_lng_dict)
 
 
-@app.route('/trails', methods=['POST'])
+@app.route('/trailheads', methods=['POST'])
 def get_trails():
     """
     Trails list API endpoint
@@ -101,3 +102,9 @@ def get_cold_weather():
     coldest_weather -= altitude_adjustment
     return json.dumps(round(coldest_weather))
 
+@app.route('/elevation', methods=['POST'])
+def get_and_process_elevation():
+    coordinates = request.get_json(force=True)["coords"]
+    coords_with_elevation = get_elevation(coordinates)
+    processed_coords = process_elevation(coords_with_elevation)
+    return json.dumps(processed_coords)

@@ -4,6 +4,7 @@ import './RouteSelectPage.css';
 import RouteSelectMap from './RouteSelectMap';
 import Forecast from './Forecast';
 import BadWeatherCase from './BadWeatherCase';
+import CreateChart from './ElevationChart';
 
 class RouteSelectPage extends Component {
     
@@ -73,14 +74,20 @@ class RouteSelectPage extends Component {
         return (
             <Container>
                 <div className="RoutePageHeadings pt-4 pb-4">
-                    <h1 className="display-4 font-weight-bold">{this.props.route.name}</h1>
+                    <h1 className="display-4 font-weight-bold">{this.props.selectedRoute.name}</h1>
                 </div>
                 <Row className="mb-3">
                     <Col sm="12" md="6">
-                        <img className="img-fluid route-image" src={this.props.route.img_link} alt=""/>
+                        <h3>Distance: {this.props.selectedRoute.distance.toFixed(2)} miles</h3>
+                        <h3>Difficulty: {this.props.selectedRoute.difficulty}</h3>
                     </Col>
                     <Col sm="12" md="6">
-                        <RouteSelectMap lat={this.props.route.lat} lng={this.props.route.lng}/>
+                        <RouteSelectMap selectedRoute={this.props.selectedRoute}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col id="elevation-chart">
+                        <CreateChart data={this.props.selectedRoute.chartData}></CreateChart>
                     </Col>
                 </Row>
                 <br/>
@@ -90,11 +97,20 @@ class RouteSelectPage extends Component {
                         <Row>
                             <Col sm="12" md="6">
                                 <h3 className="RoutePageSubHeadings pb-2">Forecast</h3>
-                                <Forecast lat={this.props.route.lat} lng={this.props.route.lng}/>
+                                <Forecast 
+                                lat={this.props.selectedRoute.maxElevationCoords.lat} 
+                                lng={this.props.selectedRoute.maxElevationCoords.lng}
+                                />
                             </Col>
                             <Col sm="12" md="6">
                                 <h3 className="RoutePageSubHeadings pb-2">Realistic Bad Weather Case</h3>
-                                <BadWeatherCase lat={this.props.route.lat} lng={this.props.route.lng} day={day} month={month} maxElev={this.props.route.maxElev}/>
+                                <BadWeatherCase 
+                                lat={this.props.selectedRoute.maxElevationCoords.lat} 
+                                lng={this.props.selectedRoute.maxElevationCoords.lng} 
+                                day={day} 
+                                month={month} 
+                                maxElev={this.props.selectedRoute.maxElevation}
+                                />
                             </Col>
                         </Row>
                     </Col>
