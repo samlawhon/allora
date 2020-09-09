@@ -75,7 +75,7 @@ def process_elevation(coords_with_elevation):
     chart_data = []
 
     # keeping track of previous dictionary to compute distance between two points
-    prev = None
+    prev = {}
 
     while 0 <= i and i < len(coords_with_elevation):
         
