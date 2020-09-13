@@ -105,6 +105,8 @@ def get_cold_weather():
 @app.route('/elevation', methods=['POST'])
 def get_and_process_elevation():
     coordinates = request.get_json(force=True)["coords"]
+    if not coordinates:
+        return '500'
     coords_with_elevation = get_elevation(coordinates)
     processed_coords = process_elevation(coords_with_elevation)
     return json.dumps(processed_coords)
