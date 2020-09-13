@@ -1,14 +1,15 @@
 import requests
 from api.flaskr.great_circle import great_circle
 from api.settings import GOOGLE_MAPS_API_KEY
+from api.flaskr.unit_conversions import FEET_TO_METERS, MILES_TO_FEET
 
-DIFFICULTY_MAP = {
-    0: "Flat",
-    1: "Lightly Uphill",
-    2: "Moderately uphill",
-    3: "Steeply uphill",
-    4: "Very steeply uphill. PROCEED WITH CAUTION"
-}
+DIFFICULTY_SCALE = [
+    "Flat",
+    "Lightly Uphill",
+    "Moderately uphill",
+    "Steeply uphill",
+    "Very steeply uphill. PROCEED WITH CAUTION"
+]
 
 def get_elevation(coords):
     """
@@ -18,23 +19,22 @@ def get_elevation(coords):
     locations_string = ""
 
     for coord in coords:
-        locations_string += str(coord["lat"]) + "," + str(coord["lng"]) + "|"
+        locations_string += f"{coord['lat']},{coord['lng']}|"
 
-    locations_string = locations_string[0:-1]
+    locations_string = locations_string[:-1]
 
     payload = {
         "locations": locations_string,
         "key": GOOGLE_MAPS_API_KEY
     }
 
-    endpoint = "https://maps.googleapis.com/maps/api/elevation/json?"
+    endpoint = "https://maps.googleapis.com/maps/api/elevation/json"
 
     result = requests.get(endpoint, payload).json()
 
     return result["results"]
 
 def determine_difficulty(elevation_change, distance_change):
-    MILES_TO_FEET = 5280
     distance_change *= MILES_TO_FEET
     slope = elevation_change / distance_change
     if slope > 0.5:
@@ -56,15 +56,15 @@ def process_elevation(coords_with_elevation):
     if not coords_with_elevation:
         return {}
 
-    FEET_TO_METERS = 3.28084
-
     # function will iterate through list forwards if the starting elevation is lower than
     # the ending elevation, otherwise it will iterate through the list backwards
-    i = 0
+    start = 0
+    stop = len(coords_with_elevation)
     incrementer = 1
     if coords_with_elevation[-1]["elevation"] < coords_with_elevation[0]["elevation"]:
+        start = stop - 1
+        stop = -1
         incrementer = -1
-        i = len(coords_with_elevation) - 1
 
     # initializing all the values that will be kept track of while iterating through the array
     starting_coords = coords_with_elevation[0]
@@ -77,17 +77,17 @@ def process_elevation(coords_with_elevation):
     # keeping track of previous dictionary to compute distance between two points
     prev = {}
 
-    while 0 <= i and i < len(coords_with_elevation):
+    for i in range(start, stop, incrementer):
         
         current_coords = coords_with_elevation[i]
 
         # resolution is unused
-        del current_coords["resolution"]
+        current_coords.pop("resolution", None)
 
         # lat and lng taken out of the location sub-dictionary and moved to the current_coords dictionary
         current_coords["lat"] = current_coords["location"]["lat"]
         current_coords["lng"] = current_coords["location"]["lng"]
-        del current_coords["location"]
+        current_coords.pop("location", None)
 
         # converting elevation from feet to meters
         current_coords["elevation"] = current_coords["elevation"] * FEET_TO_METERS
@@ -117,12 +117,10 @@ def process_elevation(coords_with_elevation):
         })
 
         prev = current_coords
-        
-        i += incrementer
     
     return {
         "coords": coords_with_elevation, 
-        "difficulty": DIFFICULTY_MAP[max_difficulty], 
+        "difficulty": DIFFICULTY_SCALE[max_difficulty], 
         "maximumElevation": max_elevation,
         "maximumElevationCoordinates": max_elevation_coords,
         "chartData": chart_data
