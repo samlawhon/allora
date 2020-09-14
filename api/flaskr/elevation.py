@@ -58,13 +58,8 @@ def process_elevation(coords_with_elevation):
 
     # function will iterate through list forwards if the starting elevation is lower than
     # the ending elevation, otherwise it will iterate through the list backwards
-    start = 0
-    stop = len(coords_with_elevation)
-    incrementer = 1
-    if coords_with_elevation[-1]["elevation"] < coords_with_elevation[0]["elevation"]:
-        start = stop - 1
-        stop = -1
-        incrementer = -1
+    start_lower_than_finish = coords_with_elevation[-1]["elevation"] >= coords_with_elevation[0]["elevation"]
+    ordering = range(0, len(coords_with_elevation)) if start_lower_than_finish else range(len(coords_with_elevation) - 1, -1, -1)
 
     # initializing all the values that will be kept track of while iterating through the array
     starting_coords = coords_with_elevation[0]
@@ -77,7 +72,7 @@ def process_elevation(coords_with_elevation):
     # keeping track of previous dictionary to compute distance between two points
     prev = {}
 
-    for i in range(start, stop, incrementer):
+    for i in ordering:
         
         current_coords = coords_with_elevation[i]
 

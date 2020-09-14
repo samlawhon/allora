@@ -103,7 +103,11 @@ def get_cold_weather():
     return json.dumps(round(coldest_weather))
 
 @app.route('/elevation', methods=['POST'])
-def get_and_process_elevation():
+def get_elevation_and_compute_route_difficulty():
+    """
+    API endpoint to get elevation associated with a route and process that information to determine route difficulty
+    :return: dictionary containing coordinates with elevation, difficulty, maximum elevation and its location and elevation chart data
+    """
     coordinates = request.get_json(force=True)["coords"]
     if not coordinates:
         return '500'
