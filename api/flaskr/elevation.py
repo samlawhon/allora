@@ -1,7 +1,7 @@
 import requests
 from api.flaskr.great_circle import great_circle
 from api.settings import GOOGLE_MAPS_API_KEY
-from api.flaskr.unit_conversions import FEET_TO_METERS, MILES_TO_FEET
+from api.flaskr.unit_conversions import feet_to_meters, miles_to_feet
 
 DIFFICULTY_SCALE = [
     "Flat",
@@ -35,7 +35,7 @@ def get_elevation(coords):
     return result["results"]
 
 def determine_difficulty(elevation_change, distance_change):
-    distance_change *= MILES_TO_FEET
+    distance_change = miles_to_feet(distance_change)
     slope = elevation_change / distance_change
     if slope > 0.5:
         return 4
@@ -85,7 +85,7 @@ def process_elevation(coords_with_elevation):
         current_coords.pop("location", None)
 
         # converting elevation from feet to meters
-        current_coords["elevation"] = current_coords["elevation"] * FEET_TO_METERS
+        current_coords["elevation"] = feet_to_meters(current_coords["elevation"])
 
         # for all coordinates except the first pair on the path, update distance and determine the difficulty for that section
         if prev:
