@@ -30,13 +30,23 @@ class RoutesMap extends Component {
             <Popup>
                 <h3>{routeName}</h3>
                 <h5>{this.props.trailCoords[routeName].distance.toFixed(2) + " miles"}</h5>
-                <Button color="info">take me there</Button>
+                <Button 
+                color="info" 
+                onClick={(event) => {
+                    let name = routeName;
+                    let positions = this.props.trailCoords[routeName].coords;
+                    let distance = this.props.trailCoords[routeName].distance;
+                    this.props.handleRouteSelect(event, name, positions, distance);
+                }}
+                >
+                    take me there
+                </Button>
             </Popup>
         </Polyline>
     )
 
     render() {
-        if (this.props.coords!==null && this.props.trailCoords!==null && this.props.trails!==null) {
+        if (this.props.coords!==null && this.props.trailCoords!==null) {
             let lat = this.props.coords['lat'];
             let lon = this.props.coords['lon'];
             let marker = "";

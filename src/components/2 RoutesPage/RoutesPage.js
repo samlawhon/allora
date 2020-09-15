@@ -20,7 +20,7 @@ class RoutesPage extends Component {
                 lat: null,
                 lon: null
             },
-            trails: null,
+            trailheads: null,
             trailCoords: null,
             mapZoom: 12,
             marker: null
@@ -46,7 +46,7 @@ class RoutesPage extends Component {
         });
     }
 
-    getTrails() {
+    getTrailheads() {
         const data = {
             city_name: this.props.location,
             distance: 30
@@ -57,7 +57,7 @@ class RoutesPage extends Component {
         
         }
 
-        fetch('/trails', requestOptions).then(response => response.json()).then(data => this.setState({trails: data}));
+        fetch('/trailheads', requestOptions).then(response => response.json()).then(data => this.setState({trailheads: data}));
     }
 
     getLocationCoords() {
@@ -111,7 +111,7 @@ class RoutesPage extends Component {
     }
 
     componentDidMount() {
-        this.getTrails();
+        this.getTrailheads();
         this.getLocationCoords();
     }
 
@@ -126,7 +126,6 @@ class RoutesPage extends Component {
                         location={this.props.location} 
                         handleRouteSelect={this.props.handleRouteSelect}
                         resetTrailCoords={this.resetTrailCoords} 
-                        trails={this.state.trails} 
                         trailCoords={this.state.trailCoords}
                         coords={this.state.coords}
                         mapZoom={this.state.mapZoom}
@@ -137,7 +136,7 @@ class RoutesPage extends Component {
                         <h4>Popular trail heads on Hiking Project</h4>
                         <div className="routesList">
                             <RoutesList 
-                            trails={this.state.trails} 
+                            trailheads={this.state.trailheads}
                             handleRouteSelect={this.props.handleRouteSelect}
                             handleTrailheadSelect={this.handleTrailheadSelect}
                             />

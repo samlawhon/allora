@@ -20,13 +20,7 @@ class App extends Component {
     this.state = {
       location: null,
       havePlace: false,
-      route: {
-        name: null,
-        img_link: null,
-        lat: null,
-        lng: null,
-        maxElev: null
-      },
+      selectedRoute: null,
       haveRoute: false,
       from: null,
       to: null
@@ -45,13 +39,6 @@ class App extends Component {
     this.setState({location: event.target.value});
     this.setState({
       havePlace: false,
-      route: {
-        name: null,
-        img_link: null,
-        lat: null,
-        lng: null,
-        maxElev: null
-      },
       haveRoute: false,
     });
   }
@@ -71,18 +58,29 @@ class App extends Component {
     }, 500);
   }
 
-  handleRouteSelect(event) {
+  handleRouteSelect(event, name, positions, distance) {
     event.preventDefault();
-    this.setState({
-      route : {
-        name: event.currentTarget.dataset.name,
-        img_link: event.currentTarget.dataset.img_link,
-        maxElev: event.currentTarget.dataset.maxelev,
-        lat: event.currentTarget.dataset.lat,
-        lng: event.currentTarget.dataset.lng,
-      },
-      haveRoute: true
-    });
+    const payload = {
+      coords: positions
+    }
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }
+    fetch('/elevation', requestOptions).then(response => response.json()).then(data => {
+      this.setState({
+        selectedRoute: {
+          name: name,
+          coords: data["coords"],
+          distance: distance,
+          difficulty: data["difficulty"],
+          maxElevation: data["maximumElevation"],
+          maxElevationCoords: data["maximumElevationCoordinates"],
+          chartData: data["chartData"]
+        },
+        haveRoute: true
+      })
+    })
     setTimeout(() => {
       let navbar = document.getElementsByClassName("navbar")[0];
       let mainPage = document.getElementById("main-page");
@@ -151,7 +149,8 @@ class App extends Component {
           />
           <br/>
           <RouteSelectPage 
-          route={this.state.route} 
+          route={this.state.route}
+          selectedRoute={this.state.selectedRoute} 
           from={this.state.from} 
           to={this.state.to}
           />
