@@ -19,13 +19,14 @@ class RoutesMap extends Component {
         </Marker>   
     )
 
-    addRoutes = (routeName) => (
+    addRoutes = (routeName, index) => (
         <Polyline 
         weight="4" 
         color="#e55934" 
         onmouseover={(event) => {event.target.setStyle({weight: 6})}} 
         onmouseout={(event) => {event.target.setStyle({weight: 3})}}
         positions={this.props.trailCoords[routeName].coords}
+        key={index}
         >
             <Popup>
                 <h3>{routeName}</h3>
@@ -88,7 +89,7 @@ class RoutesMap extends Component {
                         url={'https://api.mapbox.com/styles/v1/samlawhon/ckemud3i82mxx19k20rt83av2/tiles/256/{z}/{x}/{y}@2x?access_token='+String(process.env.REACT_APP_MAPBOX_API_KEY)}
                         attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
                         />
-                        {Object.keys(this.props.trailCoords).map(this.addRoutes)}
+                        {Object.keys(this.props.trailCoords).map((routeName, index) => this.addRoutes(routeName, index))}
                         {marker}
                     </LeafletMap>
                 </div>

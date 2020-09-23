@@ -71,6 +71,9 @@ class RouteSelectPage extends Component {
 
     render() {
         const { day, month } = this.getDate(this.props.from, this.props.to);
+        const formattedMaxCoords = `${this.props.selectedRoute.maxElevationCoords.lat},${this.props.selectedRoute.maxElevationCoords.lng}`;
+        const imageSize = '800x400';
+        const fov = '120';
         return (
             <Container>
                 <div className="RoutePageHeadings pt-4 pb-4">
@@ -88,6 +91,18 @@ class RouteSelectPage extends Component {
                 <Row>
                     <Col id="elevation-chart">
                         <CreateChart data={this.props.selectedRoute.chartData}></CreateChart>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg="4">
+                        <h1 className="display-4 image-heading">
+                            Scenery in the area:
+                        </h1>
+                    </Col>
+                    <Col lg="8">
+                        <img 
+                        src={`https://maps.googleapis.com/maps/api/streetview?location=${formattedMaxCoords}&size=${imageSize}&fov=${fov}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`}
+                        alt="Scenery at high point of route"/>
                     </Col>
                 </Row>
                 <br/>

@@ -29,21 +29,21 @@ class BadWeatherCase extends Component {
         fetch('/coldest-weather', requestOptions).then(response => response.json()).then(data => this.setState({lowest_temp: data}));
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.lat!==nextProps.lat && this.props.lng!==nextProps.lng) {
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.lat !== this.props.lat && prevProps.lng !== this.props.lng) {
             const data = {
-                lat: nextProps.lat,
-                lng: nextProps.lng,
-                day: nextProps.day,
-                month: nextProps.month,
-                maxElev: nextProps.maxElev
+                lat: this.props.lat,
+                lng: this.props.lng,
+                day: this.props.day,
+                month: this.props.month,
+                maxElev: this.props.maxElev
             }
-    
+
             const requestOptions = {
                 method: 'POST',
                 body: JSON.stringify(data)
             }
-    
+
             fetch('/coldest-weather', requestOptions).then(response => response.json()).then(data => this.setState({lowest_temp: data}));
         }
     }

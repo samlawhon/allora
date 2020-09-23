@@ -28,18 +28,18 @@ class Forecast extends Component {
         fetch('/weather', requestOptions).then(response => response.json()).then(data => this.setState({weatherData: data}));
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.lat!==nextProps.lat && this.props.lng!==nextProps.lng) {
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.lat !== this.props.lat && prevProps.lng !== this.props.lng) {
             const data = {
-                lat: nextProps.lat,
-                lng: nextProps.lng
+                lat: this.props.lat,
+                lng: this.props.lng
             }
-    
+
             const requestOptions = {
                 method: 'POST',
                 body: JSON.stringify(data)
             }
-    
+
             fetch('/weather', requestOptions).then(response => response.json()).then(data => this.setState({weatherData: data}));
         }
     }

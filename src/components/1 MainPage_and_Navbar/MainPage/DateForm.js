@@ -20,7 +20,7 @@ class DateForm extends Component {
         return (
             <div>
                 <h3 className="font-weight-bold main-sub-header">When?</h3>
-                <DayPicker numberOfMonths="2" className="Selectable" modifiers={modifiers} selectedDays={ [from, { from, to }]} onDayClick={this.props.handleDayClick}/>
+                <DayPicker numberOfMonths={2} className="Selectable" modifiers={modifiers} selectedDays={ [from, { from, to }]} onDayClick={this.props.handleDayClick}/>
             </div>
         );
     }
