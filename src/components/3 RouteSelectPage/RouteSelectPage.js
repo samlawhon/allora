@@ -5,6 +5,7 @@ import RouteSelectMap from './RouteSelectMap';
 import Forecast from './Forecast';
 import BadWeatherCase from './BadWeatherCase';
 import CreateChart from './ElevationChart';
+import RouteImage from './RouteImage';
 
 class RouteSelectPage extends Component {
     
@@ -89,6 +90,12 @@ class RouteSelectPage extends Component {
                     <Col id="elevation-chart">
                         <CreateChart data={this.props.selectedRoute.chartData}></CreateChart>
                     </Col>
+                </Row>
+                <Row>
+                    <RouteImage 
+                    lat={this.props.selectedRoute.maxElevationCoords.lat}
+                    lng={this.props.selectedRoute.maxElevationCoords.lng}
+                    />
                 </Row>
                 <br/>
                 <Row>

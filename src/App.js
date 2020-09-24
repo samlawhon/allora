@@ -91,7 +91,7 @@ class App extends Component {
         behavior: 'smooth'
       }
       window.scroll(scrollOptions);
-    }, 500);
+    }, 1000);
   }
 
   render() {

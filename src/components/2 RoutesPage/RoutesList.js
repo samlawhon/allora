@@ -5,8 +5,8 @@ import './RoutesPage.css'
 
 class RoutesList extends Component {
 
-    createRouteCard = ({image, name, lat, lng}) => (
-        <Col xs="12">
+    createRouteCard = ({image, name, lat, lng}, index) => (
+        <Col xs="12" key={index}>
             <Media 
             id={name}
             data-lat={lat} 
@@ -30,7 +30,7 @@ class RoutesList extends Component {
                 return (
                     <Container>
                         <Row>
-                            {this.props.trailheads.map(this.createRouteCard)}
+                            {this.props.trailheads.map((trailhead, index) => this.createRouteCard(trailhead, index))}
                         </Row>
                     </Container>
                 );

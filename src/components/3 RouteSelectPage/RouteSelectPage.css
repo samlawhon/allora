@@ -13,6 +13,11 @@
   width: auto;
 }
 
+.image-heading {
+  color: #e55934;
+  font-weight: bold;
+}
+
 #elevation-chart {
   height: 400px;
   width: auto;

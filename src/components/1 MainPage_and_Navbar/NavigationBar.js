@@ -17,9 +17,9 @@ const links =  [
     { id: 1, href:"https://www.mountaineers.org/blog/what-are-the-ten-essentials",  text: "Further reading"}
 ]
 
-const createNavItem = ({href, text, className}) => (
-    <NavItem>
-        <NavLink href={href} className={className}><h5 className="navItem">{text}</h5></NavLink>
+const createNavItem = ({id, href, text}) => (
+    <NavItem  key={id}>
+        <NavLink href={href}><h5 className="navItem">{text}</h5></NavLink>
     </NavItem>
 )
 
