@@ -16,6 +16,7 @@ class App extends Component {
     this.submitHandler = this.submitHandler.bind(this);
     this.handleRouteSelect = this.handleRouteSelect.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
+    this.handleJoinedRouteSelect = this.handleJoinedRouteSelect.bind(this);
 
     this.state = {
       location: null,
@@ -58,6 +59,49 @@ class App extends Component {
     }, 500);
   }
 
+  handleJoinedRouteSelect(name, routes) {
+    const payload = {
+      routes: routes
+    }
+
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }
+
+    this.setState({haveRoute: false});
+    fetch('/multi-route-elevation', requestOptions).then(response => response.json()).then(data => {
+      this.setState({
+        selectedRoute: {
+          name: name,
+          coords: data['coords'],
+          distance: data['distance'],
+          difficulty: data['difficulty'],
+          maxElevation: data["maximumElevation"],
+          maxElevationCoords: data["maximumElevationCoordinates"],
+          chartData: data["chartData"]
+        },
+        haveRoute: true
+      });
+    }).catch(() => {
+      alert("route too long");
+    }).then(() => {
+      if (this.state.haveRoute) {
+        setTimeout(() => {
+          let navbar = document.getElementsByClassName("navbar")[0];
+          let mainPage = document.getElementById("main-page");
+          let routesPage = document.getElementById("routes-page");
+          let scrollOptions = {
+            top: mainPage.scrollHeight + routesPage.scrollHeight - navbar.scrollHeight,
+            left: 0,
+            behavior: 'smooth'
+          }
+          window.scroll(scrollOptions);
+        }, 1000);
+      }
+    });
+  }
+
   handleRouteSelect(event, name, positions, distance) {
     event.preventDefault();
     const payload = {
@@ -67,6 +111,7 @@ class App extends Component {
       method: 'POST',
       body: JSON.stringify(payload)
     }
+    this.setState({haveRoute: false});
     fetch('/elevation', requestOptions).then(response => response.json()).then(data => {
       this.setState({
         selectedRoute: {
@@ -79,19 +124,22 @@ class App extends Component {
           chartData: data["chartData"]
         },
         haveRoute: true
-      })
-    })
-    setTimeout(() => {
-      let navbar = document.getElementsByClassName("navbar")[0];
-      let mainPage = document.getElementById("main-page");
-      let routesPage = document.getElementById("routes-page");
-      let scrollOptions = {
-        top: mainPage.scrollHeight + routesPage.scrollHeight - navbar.scrollHeight,
-        left: 0,
-        behavior: 'smooth'
-      }
-      window.scroll(scrollOptions);
-    }, 1000);
+      });
+    }).then(() => {
+      setTimeout(() => {
+        if (this.state.haveRoute) {
+          let navbar = document.getElementsByClassName("navbar")[0];
+          let mainPage = document.getElementById("main-page");
+          let routesPage = document.getElementById("routes-page");
+          let scrollOptions = {
+            top: mainPage.scrollHeight + routesPage.scrollHeight - navbar.scrollHeight,
+            left: 0,
+            behavior: 'smooth'
+          }
+          window.scroll(scrollOptions);
+        }
+      }, 1000);
+    });
   }
 
   render() {
@@ -126,6 +174,7 @@ class App extends Component {
           havePlace={this.state.havePlace} 
           location={this.state.location} 
           handleRouteSelect={this.handleRouteSelect}
+          handleJoinedRouteSelect={this.handleJoinedRouteSelect}
           />
         </div>
       );
@@ -146,6 +195,7 @@ class App extends Component {
           havePlace={this.state.havePlace} 
           location={this.state.location} 
           handleRouteSelect={this.handleRouteSelect}
+          handleJoinedRouteSelect={this.handleJoinedRouteSelect}
           />
           <br/>
           <RouteSelectPage 

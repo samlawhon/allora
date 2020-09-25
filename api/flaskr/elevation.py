@@ -18,8 +18,14 @@ def get_elevation(coords):
     """
     locations_string = ""
 
-    for coord in coords:
-        locations_string += f"{coord['lat']},{coord['lng']}|"
+    # try only analyzing every other coordinate if the request is over 500 coords (Google maps elevation API limit)
+    if len(coords) > 500:
+        for i in range(0, len(coords), 2):
+            coord = coords[i]
+            locations_string += f"{coord['lat']},{coord['lng']}|"
+    else:
+        for coord in coords:
+            locations_string += f"{coord['lat']},{coord['lng']}|"
 
     locations_string = locations_string[:-1]
 
@@ -29,14 +35,17 @@ def get_elevation(coords):
     }
 
     endpoint = "https://maps.googleapis.com/maps/api/elevation/json"
-
-    result = requests.get(endpoint, payload).json()
-
-    return result["results"]
+    
+    # if there are still too many coordinates, raise an error (route map quality may start to degrade once we reduce coords by a third)
+    try:
+        result = requests.get(endpoint, payload).json()
+        return result["results"]
+    except:
+        raise Exception('trail too long')
 
 def determine_difficulty(elevation_change, distance_change):
     distance_change = miles_to_feet(distance_change)
-    slope = elevation_change / distance_change
+    slope = elevation_change / distance_change if distance_change > 0 else 0
     if slope > 0.5:
         return 4
     if slope > 0.4:

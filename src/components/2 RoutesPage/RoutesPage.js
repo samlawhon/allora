@@ -130,6 +130,7 @@ class RoutesPage extends Component {
                         coords={this.state.coords}
                         mapZoom={this.state.mapZoom}
                         marker={this.state.marker}
+                        handleJoinedRouteSelect={this.props.handleJoinedRouteSelect}
                         />
                     </Col>
                     <Col sm="12" lg="4">
