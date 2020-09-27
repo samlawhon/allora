@@ -12,7 +12,7 @@ class App extends Component {
 
     super(props);
 
-    this.changeHandler = this.changeHandler.bind(this);
+    // this.changeHandler = this.changeHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
     this.handleRouteSelect = this.handleRouteSelect.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
@@ -35,18 +35,21 @@ class App extends Component {
     this.setState(range);
   }
 
-  changeHandler(event) {
-    event.preventDefault();
-    this.setState({location: event.target.value});
-    this.setState({
-      havePlace: false,
-      haveRoute: false,
-    });
-  }
+  // changeHandler(event) {
+  //   event.preventDefault();
+  //   this.setState({location: event.target.value});
+  //   this.setState({
+  //     havePlace: false,
+  //     haveRoute: false,
+  //   });
+  // }
 
-  submitHandler(event) {
+  submitHandler(event, place) {
     event.preventDefault();
-    this.setState({havePlace: true});
+    this.setState({
+      havePlace: true,
+      location: place
+    });
     setTimeout(() => {
       let navbar = document.getElementsByClassName("navbar")[0];
       let mainPage = document.getElementById("main-page");
