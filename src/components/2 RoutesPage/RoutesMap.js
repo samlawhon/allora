@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
-import { Map as LeafletMap, TileLayer, Popup, Polyline, Marker } from 'react-leaflet';
+import { Map as LeafletMap, TileLayer, Popup, Polyline, Marker, FeatureGroup } from 'react-leaflet';
 import { Container, Row, Col, Button } from "reactstrap";
+import { EditControl } from 'react-leaflet-draw';
+import ReactTooltip from 'react-tooltip';
 import './RoutesMap.css';
 
 class RoutesMap extends Component {
@@ -11,9 +13,8 @@ class RoutesMap extends Component {
         this.viewport = null;
         this.state = {
             creatingTrailMode: false,
-            joiningTrailMode: false,
-            drawingTrailMode: false,
-            joinedRoutes: new Set()
+            joinedRoutes: new Set(),
+            drawnRoutes: {},
         }
     }
 
@@ -90,65 +91,43 @@ class RoutesMap extends Component {
     }
 
     constructCreatingRoutesMenu() {
-        if (this.state.joiningTrailMode) {
+        if (this.state.creatingTrailMode) {
             return (
                 <Row>
                     <Col xs="6">
                         <Button onClick={()=>{
-                            const trailsToJoin = [];
+                            let trailsToJoin = [];
                             this.state.joinedRoutes.forEach((trailName) => trailsToJoin.push(this.props.trailCoords[trailName]));
+                            console.log(trailsToJoin);
+                            const drawnRoutesProcessed = [];
+                            Object.keys(this.state.drawnRoutes).forEach(layerId => drawnRoutesProcessed.push({coords: this.state.drawnRoutes[layerId]}));
+                            trailsToJoin = trailsToJoin.concat(drawnRoutesProcessed);
                             this.props.handleJoinedRouteSelect("Joined Route", trailsToJoin);
-                        }}>analyze trail</Button>
+                        }}>analyze route</Button>
                     </Col>
-                    <Col xs="6">
-                        <Button 
-                        onClick={()=>this.setState({
-                            joiningTrailMode: false,
-                            drawingTrailMode: false,
-                            joinedRoutes: new Set()
-                        })}
+                    <Col xs="1" className="info-icon">
+                        <img 
+                        src="https://img.icons8.com/material-outlined/24/000000/info.png" 
+                        alt="information icon"
+                        data-tip
+                        data-for='create-trails-info'
+                        />
+                        <ReactTooltip 
+                        id='create-trails-info' 
+                        type='info'
+                        place='bottom'
                         >
-                            X
-                        </Button>
+                            <ul>
+                                <li><em>Join segments</em> by clicking on them</li>
+                                <li><em>Draw your own</em> with the drawing menu (top right of map)</li>
+                                <li><em>Analyze your route!</em></li>
+                            </ul>
+                        </ReactTooltip>
                     </Col>
-                </Row>
-            );
-        }
-        else if (this.state.drawingTrailMode) {
-            return (
-                <Row>
-                    <Col xs="6">
-                        <Button onClick={()=>console.log("will analyze")}>analyze trail</Button>
-                    </Col>
-                    <Col xs="6">
-                        <Button 
-                        onClick={()=>this.setState({
-                            joiningTrailMode: false,
-                            drawingTrailMode: false,
-                            joinedRoutes: new Set()
-                        })}
-                        >
-                            X
-                        </Button>
-                    </Col>
-                </Row>
-            );
-        }
-        else if (this.state.creatingTrailMode) {
-            return (
-                <Row>
-                    <Col xs="3">
-                        <Button onClick={()=>this.setState({drawingTrailMode: true})}>draw trail</Button>
-                    </Col>
-                    <Col xs="3">
-                        <Button onClick={()=>this.setState({joiningTrailMode: true})}>join trails</Button>
-                    </Col>
-                    <Col xs="3">
+                    <Col xs="4">
                         <Button 
                         onClick={()=>this.setState({
                             creatingTrailMode: false,
-                            joiningTrailMode: false,
-                            drawingTrailMode: false,
                             joinedRoutes: new Set()
                         })}
                         >
@@ -164,10 +143,7 @@ class RoutesMap extends Component {
     }
 
     constructRoutes() {
-        if (!this.state.joiningTrailMode && !this.state.drawingTrailMode) {
-            return Object.keys(this.props.trailCoords).map((routeName) => this.addRoutes(routeName));
-        }
-        else if (this.state.joiningTrailMode) {
+        if (this.state.creatingTrailMode) {
             return Object.keys(this.props.trailCoords).map((routeName) => this.addRoutesforDrawing(routeName));
         }
         else {
@@ -175,16 +151,68 @@ class RoutesMap extends Component {
         }
     }
 
+    constructDrawingTools() {
+        if (this.state.creatingTrailMode) {
+            return (
+                <FeatureGroup>
+                    <EditControl
+                    position='topright'
+                    onEdited={e => {
+                        const replacement = {
+                            ...this.state.drawnRoutes
+                        }
+                        Object.entries(e.layers._layers).forEach(entry => {
+                            const [layerId, layerValue] = entry;
+                            replacement[layerId] = layerValue.editing.latlngs[0];
+                        });
+                        this.setState({drawnRoutes : replacement});
+                    }}
+                    onCreated={e => {
+                        e.layer.setStyle({
+                            color: "#52e3bc",
+                            weight: 8,
+                            fill: false,
+                            opacity: 1
+                        });
+                        const replacement = {
+                            ...this.state.drawnRoutes,
+                            [e.layer._leaflet_id]: e.layer.editing.latlngs[0]
+                        }
+                        this.setState({drawnRoutes: replacement});
+                    }}
+                    onDeleted={e => {
+                        const replacement = {
+                            ...this.state.drawnRoutes
+                        }
+                        Object.keys(e.layers._layers).forEach(layerId => {
+                            delete replacement[layerId];
+                        })
+                        this.setState({drawnRoutes: replacement});
+
+                    }}
+                    draw={{
+                        rectangle: false,
+                        polygon: false,
+                        circle: false,
+                        marker: false,
+                        circlemarker: false,
+                        polyline: {
+                            metric: false
+                        }
+                    }}
+                    />
+                </FeatureGroup>
+            );
+        }
+    }
+
     render() {
         if (this.props.coords!==null && this.props.trailCoords!==null) {
-            let lat = this.props.coords['lat'];
-            let lon = this.props.coords['lon'];
-            let marker = "";
-            if (this.props.marker) {
-                marker = this.addTrailMarkers(this.props.marker);
-            }
+            const { lat, lon } = this.props.coords;
+            const marker = this.props.marker ? this.addTrailMarkers(this.props.marker) : "";
             const creatingRoutesMenu = this.constructCreatingRoutesMenu();
             const routes = this.constructRoutes();
+            const drawingTools = this.constructDrawingTools();
             return (
                 <div>
                     <Container>
@@ -222,6 +250,7 @@ class RoutesMap extends Component {
                         />
                         {routes}
                         {marker}
+                        {drawingTools}
                     </LeafletMap>
                 </div>
             );
