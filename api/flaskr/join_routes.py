@@ -11,57 +11,21 @@ def join_routes(routes):
     list of routes.
     :return: a merged route
     '''
-
-    if not routes:
-        raise Exception("join routes function received a list with no routes")
-    
     while len(routes) > 1:
+
+        joining_scheme, min_between_routes = get_closest_routes(routes)
         
-        min_between = maxsize
-        min_between_routes = []
-        min_between_joining_scheme = ''
-        
-        for i, route1 in enumerate(routes):
-
-            start1 = route1['coords'][0]
-            end1 = route1['coords'][-1]
-
-            for j, route2 in enumerate(routes):
-
-                if i == j:
-                    continue
-
-                start2 = route2['coords'][0]
-                end2 = route2['coords'][-1]
-
-                distance_start1_start2 = great_circle(start1['lat'], start1['lng'], start2['lat'], start2['lng'])
-                distance_start1_end2 = great_circle(start1['lat'], start1['lng'], end2['lat'], end2['lng'])
-                distance_end1_start2 = great_circle(end1['lat'], end1['lng'], start2['lat'], start2['lng'])
-                distance_end1_end2 = great_circle(end1['lat'], end1['lng'], end2['lat'], end2['lng'])
-
-                connection_distances = PriorityQueue()
-                connection_distances.put( (distance_start1_start2,  'start1-start2') )
-                connection_distances.put( (distance_start1_end2,  'start1-end2') )
-                connection_distances.put( (distance_end1_start2,  'end1-start2') )
-                connection_distances.put( (distance_end1_end2,  'end1-end2') )
-                
-                local_min_distance, joining_scheme = connection_distances.get()
-
-                if local_min_distance < min_between:
-                    min_between = local_min_distance
-                    min_between_routes = [route1, route2]
-                    min_between_joining_scheme = joining_scheme
-
         route1, route2 = min_between_routes
+        
         route1_coords, route2_coords = route1['coords'], route2['coords']
         merged_route_coords = []
 
-        if min_between_joining_scheme == 'start1-start2':
+        if joining_scheme == 'start1-start2':
             route1_coords.reverse()
             merged_route_coords = route1_coords + route2_coords
-        elif min_between_joining_scheme == 'start1-end2':
+        elif joining_scheme == 'start1-end2':
             merged_route_coords = route2_coords + route1_coords
-        elif min_between_joining_scheme == 'end1-start2':
+        elif joining_scheme == 'end1-start2':
             merged_route_coords = route1_coords + route2_coords
         else:  # end1-end2
             route2_coords.reverse()
@@ -74,6 +38,57 @@ def join_routes(routes):
     merged_route = routes[0]
 
     return merged_route
+
+
+def get_closest_routes(routes):
+    '''
+    Analyzes the routes list to find the closest two endpoints between different routes in the routes list
+    :return: the joining scheme and the minimum distance of the closest two routes in the list
+    '''
+    min_between = maxsize
+    min_between_routes = []
+    min_between_joining_scheme = ''
+
+    for i, route1 in enumerate(routes):
+
+        start1 = route1['coords'][0]
+        end1 = route1['coords'][-1]
+
+        for j, route2 in enumerate(routes):
+
+            if i == j:
+                continue
+                
+            start2 = route2['coords'][0]
+            end2 = route2['coords'][-1]
+
+            local_min_distance, joining_scheme = get_min_joining_scheme(start1, end1, start2, end2)
+
+            if local_min_distance < min_between:
+                min_between = local_min_distance
+                min_between_routes = [route1, route2]
+                min_between_joining_scheme = joining_scheme
+    
+    return min_between_joining_scheme, min_between_routes
+
+
+def get_min_joining_scheme(start1_coords, end1_coords, start2_coords, end2_coords):
+    '''
+    Analyzes the start and ends of trails 1 and 2 to determine the minimum distance between any two endpoints on different trails.
+    :return: the minimum distance between any two endoints on different trails and those endpoints
+    '''
+    distance_start1_start2 = great_circle(start1_coords['lat'], start1_coords['lng'], start2_coords['lat'], start2_coords['lng'])
+    distance_start1_end2 = great_circle(start1_coords['lat'], start1_coords['lng'], end2_coords['lat'], end2_coords['lng'])
+    distance_end1_start2 = great_circle(end1_coords['lat'], end1_coords['lng'], start2_coords['lat'], start2_coords['lng'])
+    distance_end1_end2 = great_circle(end1_coords['lat'], end1_coords['lng'], end2_coords['lat'], end2_coords['lng'])
+
+    connection_distances = PriorityQueue()
+    connection_distances.put( (distance_start1_start2,  'start1-start2') )
+    connection_distances.put( (distance_start1_end2,  'start1-end2') )
+    connection_distances.put( (distance_end1_start2,  'end1-start2') )
+    connection_distances.put( (distance_end1_end2,  'end1-end2') )
+
+    return connection_distances.get()
 
 def get_distance(route):
     '''
