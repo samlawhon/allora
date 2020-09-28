@@ -35,7 +35,6 @@ class RouteImage extends Component {
                 this.setState({imageUrl: streetviewAPI.href});
             }
             else{
-                console.log("here!");
                 this.setState({imageUrl: null});
             }
         });

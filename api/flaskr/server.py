@@ -13,6 +13,7 @@ from api.flaskr.weather import get_current_weather
 from api.flaskr.cold_weather import find_closest_station, find_coldest_weather
 from api.flaskr.geodata import generate_trails
 from api.flaskr.elevation import get_elevation, process_elevation
+from api.flaskr.join_routes import join_routes, get_distance
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
@@ -33,7 +34,7 @@ def lat_lng():
     city_name = name['city_name']
     lat_lng = geocode(city_name)
     if lat_lng is None:
-        return '500'
+        return "Geocoding error", 500
     else:
         lat_lng_dict = { 'lat':lat_lng[0], 'lon':lat_lng[1] }
         return json.dumps(lat_lng_dict)
@@ -50,7 +51,7 @@ def get_trails():
     max_distance = name_and_distance['distance']
     lat_lng = geocode(city_name)
     if lat_lng is None:
-        return '500'
+        return "Geocoding error", 500
     hiking_api = HikingApi()
     trails = hiking_api.get_trails(lat_lng[0], lat_lng[1], max_distance)
     trails_dicts = [trail.as_dict() for trail in trails]
@@ -110,7 +111,28 @@ def get_elevation_and_compute_route_difficulty():
     """
     coordinates = request.get_json(force=True)["coords"]
     if not coordinates:
-        return '500'
+        return "Empty coordinates list supplied", 400
     coords_with_elevation = get_elevation(coordinates)
     processed_coords = process_elevation(coords_with_elevation)
+    return json.dumps(processed_coords)
+
+@app.route('/multi-route-elevation', methods=['POST'])
+def create_route_and_compute_elevation_and_difficulty():
+    '''
+    API endpoint to join multiple trails, query Google maps for elevation information and process that information
+    :return: dictionary corresponding to the merged route with same structure as get_elevation_and_compute_route_difficulty return value, except with an added 'distance' key
+    '''
+    routes = request.get_json(force=True)["routes"]
+    if not routes:
+        return "Empty route list supplied", 400
+    merged_route = join_routes(routes)
+    try:
+        coords_with_elevation = get_elevation(merged_route['coords'])
+    except Exception as e:
+        if str(e) == "Trail too long":
+            return str(e), 413
+        else:
+            raise
+    processed_coords = process_elevation(coords_with_elevation)
+    processed_coords['distance'] = get_distance(merged_route['coords'])
     return json.dumps(processed_coords)
