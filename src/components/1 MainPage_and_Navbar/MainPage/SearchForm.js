@@ -15,7 +15,9 @@ const SearchForm = props => {
                 type="text" 
                 name="location" 
                 id="search-bar" 
-                placeholder="e.g. Nederland, CO"/>
+                placeholder="e.g. Nederland, CO"
+                required
+                />
                 <br/>
                 <h3 className="font-weight-bold main-sub-header">How far?</h3>
                 <h5>Maximum distance</h5>
