@@ -2,12 +2,14 @@ import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import './RouteSelectPage.css';
 
-let CreateChart = (props) => {
+const CreateChart = props => {
+
     let data = [{
         "id": "elevation",
         "color": "#095D42",
         "data": props.data
     }]
+    
     return (
         <ResponsiveLine
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
@@ -36,9 +38,6 @@ let CreateChart = (props) => {
         }}
         colors={{ scheme: 'nivo' }}
         enablePoints={false}
-        // onMouseMove={(point) => {
-        //     console.log(point);
-        // }}
         useMesh={true}
         >
         </ResponsiveLine>

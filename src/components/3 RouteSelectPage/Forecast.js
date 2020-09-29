@@ -1,60 +1,32 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import './RouteSelectPage.css';
 import './Forecast.css';
 
-class Forecast extends Component {
+const Forecast = props => {
 
-    constructor(props) {
-        
-        super(props);
+    const [weatherData, setWeatherData] = useState(null);
 
-        this.state = {
-            weatherData: null
+    useEffect(() => {
+        const payload = {
+            ...props
         }
-    }
-
-    componentDidMount() {
-        const data = {
-            lat: this.props.lat,
-            lng: this.props.lng
-        }
-
         const requestOptions = {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(payload)
         }
+        fetch('/weather', requestOptions).then(response => response.json()).then(weatherData => setWeatherData(weatherData));
+    }, [props.lat, props.lng]);
 
-        fetch('/weather', requestOptions).then(response => response.json()).then(data => this.setState({weatherData: data}));
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.lat !== this.props.lat && prevProps.lng !== this.props.lng) {
-            const data = {
-                lat: this.props.lat,
-                lng: this.props.lng
-            }
-
-            const requestOptions = {
-                method: 'POST',
-                body: JSON.stringify(data)
-            }
-
-            fetch('/weather', requestOptions).then(response => response.json()).then(data => this.setState({weatherData: data}));
-        }
-    }
-
-    dayForecast(n) {
-        const d = new Date();
-        const today = (d.getDay() + n)%7;
+    const dayForecast = n => {
+        const today = (new Date().getDay() + n) % 7;
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const mainDescription = this.state.weatherData['daily'][n]['weather'][0]['main'];
-        const icon = this.state.weatherData['daily'][n]['weather'][0]['icon'];
+        const mainDescription = weatherData.daily[n].weather[0].main;
+        const icon = weatherData.daily[n].weather[0].icon;
         const iconAddress = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
-        const maxTemp = this.state.weatherData['daily'][n]['temp']['max'];
-        const minTemp = this.state.weatherData['daily'][n]['temp']['min'];
+        const { min, max } = weatherData.daily[n].temp;
         return (
-            <Container className="text-left">
+            <Container className="text-left" key={n}>
                 <h5>{ days[today] }</h5>
                 <Row>
                     <Col sm="12" md="4">
@@ -66,8 +38,8 @@ class Forecast extends Component {
                                 <h4>{ mainDescription }</h4>
                             </Col>
                             <Col sm="12">
-                                <p>Max temp: { maxTemp }</p>
-                                <p>Min temp: { minTemp }</p>
+                                <p>Max temp: { max }</p>
+                                <p>Min temp: { min }</p>
                             </Col>
                         </Row>
                     </Col>
@@ -76,26 +48,13 @@ class Forecast extends Component {
         );
     }
 
-    render() {
-        if (this.state.weatherData!==null) {
-            return(
-                <div className="forecastList pt-2">
-                    { this.dayForecast(0) }
-                    { this.dayForecast(1) }
-                    { this.dayForecast(2) }
-                    { this.dayForecast(3) }
-                    { this.dayForecast(4) }
-                    { this.dayForecast(5) }
-                    { this.dayForecast(6) }
-                </div>
-            );
-        }
-        else {
-            return (
-                <p>No weather data yet</p>
-            );
-        }
-    }
+    const generateForecastList = () => (
+        <div className="forecastList pt-2">
+            {[...Array(7).keys()].map(day => dayForecast(day))}
+        </div>
+    );
+
+    return weatherData ? generateForecastList() : <p>Weather data loading</p>;
 }
 
 export default Forecast;

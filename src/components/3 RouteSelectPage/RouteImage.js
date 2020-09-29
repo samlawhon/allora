@@ -1,24 +1,17 @@
-import React, { Component, Fragment } from 'react';
+import React, { useState, useRef, useEffect, Fragment } from 'react';
 import { Col } from 'reactstrap';
 
-class RouteImage extends Component {
+const RouteImage = props =>  {
 
-    constructor(props) {
+    const IMAGESIZE = '800x400';
+    const FIELDOFVIEW = '120';
 
-        super(props);
+    const [imageURL, setImageURL] = useState(null);
 
-        this.IMAGESIZE = '800x400';
-        this.FIELDOFVIEW = '120';
-
-        this.state = {
-            imageUrl: null
-        }
-    }
-
-    updateUrl() {
+    const updateUrl = () => {
         const metadataAPI = new URL('https://maps.googleapis.com/maps/api/streetview/metadata');
         const metadataParams = {
-            location: `${this.props.lat},${this.props.lng}`,
+            location: `${props.lat},${props.lng}`,
             key: `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
         }
         metadataAPI.search = new URLSearchParams(metadataParams).toString();
@@ -26,53 +19,48 @@ class RouteImage extends Component {
             if (data.status !== "ZERO_RESULTS") {
                 const streetviewAPI = new URL('https://maps.googleapis.com/maps/api/streetview');
                 const params = {
-                    location: `${this.props.lat},${this.props.lng}`,
-                    size: this.IMAGESIZE,
-                    fov: this.FIELDOFVIEW,
+                    location: `${props.lat},${props.lng}`,
+                    size: IMAGESIZE,
+                    fov: FIELDOFVIEW,
                     key: `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
                 }
                 streetviewAPI.search = new URLSearchParams(params).toString();
-                this.setState({imageUrl: streetviewAPI.href});
+                setImageURL(streetviewAPI.href);
             }
             else{
-                this.setState({imageUrl: null});
+                setImageURL(null);
             }
         });
     }
 
-    componentDidMount() {
-        this.updateUrl();
-    }
+    const data = useRef();
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.lat !== this.props.lat && prevProps.lng !== this.props.lng) {
-            this.updateUrl();
+    useEffect(() => {
+        if (!data.current || (data.current.lat !== props.lat && data.current.lng !== props.lng)) {
+            updateUrl();
+            data.current = {
+                lat: props.lat,
+                lng: props.lng
+            }
         }
-    }
+    });
 
-    render() {
-        if (this.state.imageUrl) {
-            return (
-                <Fragment>
-                    <Col lg="4">
-                        <h1 className="display-4 image-heading">
-                            Scenery in the area:
-                        </h1>
-                    </Col>
-                    <Col lg="8">
-                        <img 
-                        src={this.state.imageUrl}
-                        alt="Scenery at high point of route"/>
-                    </Col>
-                </Fragment>
-            );
-        }
-        else {
-            return (
-                <Fragment></Fragment>
-            )
-        }
-    }
+    const image = (
+        <Fragment>
+            <Col lg="4">
+                <h1 className="display-4 image-heading">
+                    Scenery in the area:
+                </h1>
+            </Col>
+            <Col lg="8">
+                <img 
+                src={imageURL}
+                alt="Scenery at high point of route"/>
+            </Col>
+        </Fragment>
+    );
+
+    return imageURL ? image : <Fragment></Fragment>
 }
 
 export default RouteImage;
