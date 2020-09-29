@@ -102,7 +102,8 @@ class RoutesPage extends Component {
             lat: viewport.lat,
             lon: viewport.lon,
             height_from_center: this.HEIGHT_FROM_CENTER,
-            width_from_center: this.WIDTH_FROM_CENTER
+            width_from_center: this.WIDTH_FROM_CENTER,
+            distance: this.props.maxDistance
         }
         const requestOptions = {
             method: 'POST',
