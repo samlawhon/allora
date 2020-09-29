@@ -12,7 +12,8 @@ class App extends Component {
 
     super(props);
 
-    this.changeHandler = this.changeHandler.bind(this);
+    this.locationChangeHandler = this.locationChangeHandler.bind(this);
+    this.distanceChangeHandler = this.distanceChangeHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
     this.handleRouteSelect = this.handleRouteSelect.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
@@ -20,6 +21,7 @@ class App extends Component {
 
     this.state = {
       location: null,
+      maxDistance: 10,
       havePlace: false,
       selectedRoute: null,
       haveRoute: false,
@@ -29,24 +31,33 @@ class App extends Component {
 
   }
 
+  locationChangeHandler(event) {
+    this.setState({
+      havePlace: false,
+      location: event.currentTarget.value
+    });
+  }
+
+  distanceChangeHandler(event) {
+    this.setState({
+      havePlace: false,
+      maxDistance: Number(event.currentTarget.value)
+    });
+  }
 
   handleDayClick(day){
     const range = DateUtils.addDayToRange(day, this.state);
-    this.setState(range);
-  }
-
-  changeHandler(event) {
-    event.preventDefault();
-    this.setState({location: event.target.value});
     this.setState({
-      havePlace: false,
-      haveRoute: false,
+      ...range,
+      havePlace: false
     });
   }
 
   submitHandler(event) {
     event.preventDefault();
-    this.setState({havePlace: true});
+    this.setState({
+      havePlace: true,
+    });
     setTimeout(() => {
       let navbar = document.getElementsByClassName("navbar")[0];
       let mainPage = document.getElementById("main-page");
@@ -148,7 +159,9 @@ class App extends Component {
         <div className="App">
           <NavigationBar/>
           <MainPage 
-          changeHandler={this.changeHandler} 
+          locationChangeHandler={this.locationChangeHandler}
+          distanceChangeHandler={this.distanceChangeHandler}
+          distance={this.state.maxDistance}
           submitHandler={this.submitHandler} 
           handleDayClick={this.handleDayClick} 
           from={this.state.from} 
@@ -163,7 +176,9 @@ class App extends Component {
         <div className="App">
           <NavigationBar/>
           <MainPage 
-          changeHandler={this.changeHandler} 
+          locationChangeHandler={this.locationChangeHandler}
+          distanceChangeHandler={this.distanceChangeHandler}
+          distance={this.state.maxDistance}
           submitHandler={this.submitHandler} 
           handleDayClick={this.handleDayClick} 
           from={this.state.from} 
@@ -175,6 +190,7 @@ class App extends Component {
           location={this.state.location} 
           handleRouteSelect={this.handleRouteSelect}
           handleJoinedRouteSelect={this.handleJoinedRouteSelect}
+          maxDistance={this.state.maxDistance}
           />
         </div>
       );
@@ -184,7 +200,9 @@ class App extends Component {
         <div className="App">
           <NavigationBar/>
           <MainPage 
-          changeHandler={this.changeHandler} 
+          locationChangeHandler={this.locationChangeHandler}
+          distanceChangeHandler={this.distanceChangeHandler}
+          distance={this.state.maxDistance}
           submitHandler={this.submitHandler} 
           handleDayClick={this.handleDayClick} 
           from={this.state.from} 
@@ -196,6 +214,7 @@ class App extends Component {
           location={this.state.location} 
           handleRouteSelect={this.handleRouteSelect}
           handleJoinedRouteSelect={this.handleJoinedRouteSelect}
+          maxDistance={this.state.maxDistance}
           />
           <br/>
           <RouteSelectPage 

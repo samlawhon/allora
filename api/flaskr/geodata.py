@@ -10,7 +10,7 @@ def populate_coords_and_distance(way, trail_info):
             trail_info["distance"] += great_circle(prev_node.lat, prev_node.lon, node.lat, node.lon)
         prev_node = node
 
-def generate_trails(lat, lon, height_from_center, width_from_center):
+def generate_trails(lat, lon, height_from_center, width_from_center, max_trail_distance):
     """
     Generates a dictionary of trails by querying Open Street Map for all named paths in the area.
     :return: dictionary structured as { trail name: [tuples of coordinates] }
@@ -34,13 +34,15 @@ def generate_trails(lat, lon, height_from_center, width_from_center):
 
     unnamed = 1
 
+    MIN_TRAIL_DISTANCE = 0.5
+
     for way in results.ways:
         
         trail_info = {"coords": [], "distance": 0}
         populate_coords_and_distance(way, trail_info)
         
-        # don't record any trails shorter than half a mile
-        if trail_info["distance"] < 0.5:
+        # don't record any trails shorter than half a mile or longer than the max trail distance
+        if trail_info['distance'] < MIN_TRAIL_DISTANCE or max_trail_distance < trail_info['distance']:
             continue
 
         name = way.tags.get('name')

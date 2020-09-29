@@ -64,11 +64,12 @@ def get_trail_coords():
     :return: map of trail names to a list of coordinates
     """
     payload = request.get_json(force=True)
-    lat = payload["lat"]
-    lon = payload["lon"]
-    height_from_center = payload["height_from_center"]
-    width_from_center = payload["width_from_center"]
-    trails = generate_trails(lat, lon, height_from_center, width_from_center)
+    lat = payload['lat']
+    lon = payload['lon']
+    height_from_center = payload['height_from_center']
+    width_from_center = payload['width_from_center']
+    max_distance = payload['distance']
+    trails = generate_trails(lat, lon, height_from_center, width_from_center, max_distance)
     return json.dumps(trails)
 
 @app.route('/weather', methods=['POST'])

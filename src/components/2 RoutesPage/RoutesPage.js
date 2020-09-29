@@ -77,7 +77,8 @@ class RoutesPage extends Component {
             lat: this.state.coords.lat,
             lon: this.state.coords.lon,
             height_from_center: this.HEIGHT_FROM_CENTER,
-            width_from_center: this.WIDTH_FROM_CENTER
+            width_from_center: this.WIDTH_FROM_CENTER,
+            distance: this.props.maxDistance
         }
         const requestOptions = {
             method: 'POST',
@@ -111,8 +112,8 @@ class RoutesPage extends Component {
     }
 
     componentDidMount() {
-        this.getTrailheads();
         this.getLocationCoords();
+        this.getTrailheads();
     }
 
     render() {
