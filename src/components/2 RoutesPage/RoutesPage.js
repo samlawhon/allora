@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import RoutesList from './RoutesList';
 import RoutesMap from './RoutesMap';
@@ -29,7 +29,7 @@ const RoutesPage = props => {
         setMarker(newCoords);
     }
 
-    const getTrailheads = () => {
+    const getTrailheads = useCallback(() => {
         const payload = {
             city_name: props.location,
             distance: 30
@@ -40,24 +40,9 @@ const RoutesPage = props => {
         }
 
         fetch('/trailheads', requestOptions).then(response => response.json()).then(trailHeads => setTrailheads(trailHeads));
-    }
+    }, [props.location]);
 
-    const getLocationCoords = () => {
-        const payload = {
-            city_name: props.location
-        }
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        }
-
-        fetch('/lat-lng', requestOptions).then(response => response.json()).then(coords => {
-            setCoords(coords);
-            getTrailCoords(coords.lat, coords.lon)
-        })
-    }
-
-    const getTrailCoords = (lat, lon) => {
+    const getTrailCoords = useCallback( (lat, lon) => {
         const payload = {
             lat: lat,
             lon: lon,
@@ -70,7 +55,22 @@ const RoutesPage = props => {
             body: JSON.stringify(payload)
         }
         fetch('/trail-coords', requestOptions).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
-    }
+    }, [props.maxDistance]);
+
+    const getLocationCoords = useCallback(() => {
+        const payload = {
+            city_name: props.location
+        }
+        const requestOptions = {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        }
+
+        fetch('/lat-lng', requestOptions).then(response => response.json()).then(coords => {
+            setCoords(coords);
+            getTrailCoords(coords.lat, coords.lon)
+        })
+    }, [props.location, getTrailCoords]);
 
     const resetTrailCoords = viewport => {
         if (!viewport) {
@@ -95,7 +95,7 @@ const RoutesPage = props => {
     useEffect(() => {
         getLocationCoords();
         getTrailheads();
-    }, [])
+    }, [getLocationCoords, getTrailheads]);
 
     return (
         <Container className="pt-4 pb-4" id="routes-page">

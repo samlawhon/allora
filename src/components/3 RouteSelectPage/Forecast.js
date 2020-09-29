@@ -16,7 +16,7 @@ const Forecast = props => {
             body: JSON.stringify(payload)
         }
         fetch('/weather', requestOptions).then(response => response.json()).then(weatherData => setWeatherData(weatherData));
-    }, [props.lat, props.lng]);
+    }, [props]);
 
     const dayForecast = n => {
         const today = (new Date().getDay() + n) % 7;

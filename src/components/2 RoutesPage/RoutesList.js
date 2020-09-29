@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Container, Row, Col, Media} from 'reactstrap';
 import './RoutesMap.css'
 import './RoutesPage.css'
