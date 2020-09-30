@@ -107,8 +107,6 @@ const App = () => {
         coords: positions
       })
     }
-
-    console.log(requestOptions);
     
     fetch('/elevation', requestOptions).then(response => response.json()).then(data => {
       setSelectedRoute({

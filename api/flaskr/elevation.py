@@ -52,7 +52,7 @@ def get_elevation(coords):
 def determine_difficulty(elevation_change, distance_change):
     distance_change = miles_to_feet(distance_change)
     slope = elevation_change / distance_change if distance_change > 0 else 0
-    if slope > 0.5:
+    if slope > 0.6:
         return 4
     if slope > 0.4:
         return 3

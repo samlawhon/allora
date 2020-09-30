@@ -71,7 +71,7 @@ const RouteSelectPage = props => {
                             />
                         </Col>
                         <Col sm="12" md="6">
-                            <h3 className="RoutePageSubHeadings pb-2">Realistic Bad Weather Case</h3>
+                            <h3 className="RoutePageSubHeadings pb-2">Historical Worst Case Weather Scenario</h3>
                             <BadWeatherCase 
                             lat={props.selectedRoute.maxElevationCoords.lat} 
                             lng={props.selectedRoute.maxElevationCoords.lng} 
