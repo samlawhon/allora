@@ -3,6 +3,7 @@ Main server routes
 """
 import json
 import os
+import requests
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -14,6 +15,7 @@ from api.flaskr.cold_weather import find_closest_station, find_coldest_weather
 from api.flaskr.geodata import generate_trails
 from api.flaskr.elevation import get_elevation, process_elevation, generate_coords
 from api.flaskr.join_routes import join_routes, get_distance
+from api.settings import GOOGLE_MAPS_API_KEY
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
@@ -133,3 +135,31 @@ def create_route_and_compute_elevation_and_difficulty():
     processed_coords = process_elevation(coords_with_elevation)
     processed_coords['distance'] = get_distance(merged_route)
     return json.dumps(processed_coords)
+
+@app.route('/image-meta-data')
+def proxy_image_meta_data():
+    lat = request.args['lat']
+    lng = request.args['lng']
+    location = f"{lat},{lng}"
+    endpoint = 'https://maps.googleapis.com/maps/api/streetview/metadata'
+    payload = {
+        'key': GOOGLE_MAPS_API_KEY,
+        'location': location
+    }
+    return requests.get(endpoint, payload).content
+
+@app.route('/image')
+def proxy_image_data():
+    lat = request.args['lat']
+    lng = request.args['lng']
+    size = request.args['size']
+    fov = request.args['fov']
+    location = f"{lat},{lng}"
+    endpoint = 'https://maps.googleapis.com/maps/api/streetview'
+    payload = {
+        'key': GOOGLE_MAPS_API_KEY,
+        'location': location,
+        'size': size,
+        'fov': fov
+    }
+    return requests.get(endpoint, payload).content
