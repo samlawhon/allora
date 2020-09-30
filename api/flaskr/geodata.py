@@ -51,7 +51,7 @@ def generate_trails(lat, lon, height_from_center, width_from_center, max_trail_d
         # give it a new unique name as "unnamed {unnamed id number}", 
         # for example "unnamed 78"
         if not name or name in trails:
-            name = f'unnamed {unnamed}'
+            name = f'Unnamed {unnamed}'
             unnamed += 1
 
         trails[name] = trail_info

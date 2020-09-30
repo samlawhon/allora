@@ -2,6 +2,7 @@ import requests
 from api.flaskr.great_circle import great_circle
 from api.settings import GOOGLE_MAPS_API_KEY
 from api.flaskr.unit_conversions import feet_to_meters, miles_to_feet
+from api.flaskr.geocoding_api import reverse_geocode
 
 DIFFICULTY_SCALE = [
     "Flat",
@@ -141,10 +142,14 @@ def process_elevation(coords_with_elevation):
 
         prev = current_coords
     
+    address_coords = coords_with_elevation[0] if start_lower_than_finish else coords_with_elevation[-1]
+    address = reverse_geocode(address_coords)
+
     return {
         "coords": coords_with_elevation, 
         "difficulty": DIFFICULTY_SCALE[max_difficulty], 
         "maximumElevation": max_elevation,
         "maximumElevationCoordinates": max_elevation_coords,
-        "chartData": chart_data
+        "chartData": chart_data,
+        "address": address
         }

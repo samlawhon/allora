@@ -92,7 +92,8 @@ const App = () => {
         difficulty: data.difficulty,
         maxElevation: data.maximumElevation,
         maxElevationCoords: data.maximumElevationCoordinates,
-        chartData: data.chartData
+        chartData: data.chartData,
+        address: data.address
       });
     }).catch(() => alert("route too long"));
   }
@@ -114,7 +115,8 @@ const App = () => {
         difficulty: data.difficulty,
         maxElevation: data.maximumElevation,
         maxElevationCoords: data.maximumElevationCoordinates,
-        chartData: data.chartData
+        chartData: data.chartData,
+        address: data.address
       });
     });
   }
