@@ -13,7 +13,7 @@ from api.flaskr.geocoding_api import geocode
 from api.flaskr.weather import get_current_weather
 from api.flaskr.cold_weather import find_closest_station, find_coldest_weather
 from api.flaskr.geodata import generate_trails
-from api.flaskr.elevation import get_elevation, process_elevation, generate_coords
+from api.flaskr.elevation import get_elevation, process_elevation
 from api.flaskr.join_routes import join_routes, get_distance
 from api.settings import GOOGLE_MAPS_API_KEY
 
@@ -101,30 +101,29 @@ def get_cold_weather():
     coldest_weather -= altitude_adjustment
     return json.dumps(round(coldest_weather))
 
-@app.route('/elevation')
+@app.route('/elevation', methods=['POST'])
 def get_elevation_and_compute_route_difficulty():
     """
     API endpoint to get elevation associated with a route and process that information to determine route difficulty
     :return: dictionary containing coordinates with elevation, difficulty, maximum elevation and its location and elevation chart data
     """
-    coords_string = request.args['coords']
-    if not coords_string:
+    coordinates = request.get_json(force=True)['coords']
+    if not coordinates:
         return "Empty coordinates list supplied", 400
-    coordinates = generate_coords(coords_string)
     coords_with_elevation = get_elevation(coordinates)
     processed_coords = process_elevation(coords_with_elevation)
     return json.dumps(processed_coords)
 
-@app.route('/multi-route-elevation')
+@app.route('/multi-route-elevation', methods=['POST'])
 def create_route_and_compute_elevation_and_difficulty():
     '''
     API endpoint to join multiple trails, query Google maps for elevation information and process that information
     :return: dictionary corresponding to the merged route with same structure as get_elevation_and_compute_route_difficulty return value, except with an added 'distance' key
     '''
-    routes = request.args['routes']
+    routes = request.get_json(force=True)['routes']
     if not routes:
         return "Empty route list supplied", 400
-    merged_route = join_routes(routes)
+    merged_route = join_routes(routes)['coords']
     try:
         coords_with_elevation = get_elevation(merged_route)
     except Exception as e:

@@ -76,15 +76,14 @@ const App = () => {
   // this requires a separate function from handleRouteSelect because it hits a different endpoint
   const handleJoinedRouteSelect = (name, routes) => {
 
-    let coordsParam = '';
-    routes.forEach(route => {
-      route.coords.forEach(coord => coordsParam += `${coord.lat},${coord.lng}|`)
-      coordsParam += 'r';
-    });
-
-    const payload = new URLSearchParams({ routes: coordsParam});
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        routes: routes
+      })
+    }
     
-    fetch(`/multi-route-elevation?${payload}`).then(response => response.json()).then(data => {
+    fetch('/multi-route-elevation', requestOptions).then(response => response.json()).then(data => {
       setSelectedRoute({
         name: name,
         coords: data.coords,
@@ -101,13 +100,17 @@ const App = () => {
 
   const handleRouteSelect = (event, name, positions, distance) => {
     event.preventDefault();
-    
-    let positionsString = '';
-    positions.forEach((position) => positionsString += `${position.lat},${position.lng}|`)
 
-    const payload = new URLSearchParams({ coords: positionsString });
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        coords: positions
+      })
+    }
+
+    console.log(requestOptions);
     
-    fetch(`/elevation?${payload}`).then(response => response.json()).then(data => {
+    fetch('/elevation', requestOptions).then(response => response.json()).then(data => {
       setSelectedRoute({
         name: name,
         coords: data.coords,
