@@ -8,14 +8,12 @@ const Forecast = props => {
     const [weatherData, setWeatherData] = useState(null);
 
     useEffect(() => {
-        const payload = {
+        
+        const payload = new URLSearchParams({
             ...props
-        }
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        }
-        fetch('/weather', requestOptions).then(response => response.json()).then(weatherData => setWeatherData(weatherData));
+        });
+
+        fetch(`/weather?${payload}`).then(response => response.json()).then(weatherData => setWeatherData(weatherData));
     }, [props]);
 
     const dayForecast = n => {

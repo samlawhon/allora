@@ -6,14 +6,11 @@ const BadWeatherCase = props => {
     const [lowestTemp, setLowestTemp] = useState(null);
 
     useEffect(() => {
-        const payload = {
+        const payload = new URLSearchParams({
             ...props
-        }
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        }
-        fetch('/coldest-weather', requestOptions).then(response => response.json()).then(lowestTemp => setLowestTemp(lowestTemp));
+        });
+
+        fetch(`/coldest-weather?${payload}`).then(response => response.json()).then(lowestTemp => setLowestTemp(lowestTemp));
     }, [props]);
 
     const renderBadCaseImage = () => {

@@ -30,66 +30,55 @@ const RoutesPage = props => {
     }
 
     const getTrailheads = useCallback(() => {
-        const payload = {
-            city_name: props.location,
-            distance: 30
-        }
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        }
 
-        fetch('/trailheads', requestOptions).then(response => response.json()).then(trailHeads => setTrailheads(trailHeads));
+        const payload = new URLSearchParams({ city_name: props.location, distance: 30 });
+        fetch(`/trailheads?${payload}`).then(response => response.json()).then(trailHeads => setTrailheads(trailHeads));
+
     }, [props.location]);
 
     const getTrailCoords = useCallback( (lat, lon) => {
-        const payload = {
+        const params = {
             lat: lat,
             lon: lon,
             height_from_center: HEIGHT_FROM_CENTER,
             width_from_center: WIDTH_FROM_CENTER,
             distance: props.maxDistance
         }
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        }
-        fetch('/trail-coords', requestOptions).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
+
+        const payload = new URLSearchParams(params);
+
+        fetch(`/trail-coords?${payload}`).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
     }, [props.maxDistance]);
 
     const getLocationCoords = useCallback(() => {
-        const payload = {
-            city_name: props.location
-        }
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        }
 
-        fetch('/lat-lng', requestOptions).then(response => response.json()).then(coords => {
+        const payload = new URLSearchParams({ city_name: props.location });
+
+        fetch(`/lat-lng?${payload}`).then(response => response.json()).then(coords => {
             setCoords(coords);
             getTrailCoords(coords.lat, coords.lon)
-        })
+        });
     }, [props.location, getTrailCoords]);
 
     const resetTrailCoords = viewport => {
         if (!viewport) {
             return
         }
+        
         setCoords({lat: viewport.lat, lon: viewport.lon});
         setMapZoom(viewport.zoom);
-        const payload = {
+        
+        const params = {
             lat: viewport.lat,
             lon: viewport.lon,
             height_from_center: HEIGHT_FROM_CENTER,
             width_from_center: WIDTH_FROM_CENTER,
             distance: props.maxDistance
         }
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        }
-        fetch('/trail-coords', requestOptions).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
+
+        const payload = new URLSearchParams(params);
+
+        fetch(`/trail-coords?${payload}`).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
     }
 
     useEffect(() => {

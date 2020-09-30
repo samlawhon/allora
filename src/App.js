@@ -13,9 +13,10 @@ const App = () => {
   const [maxDistance, setMaxDistance] = useState(10);
   const [dayRange, setDayRange] = useState({from: null, to: null});
 
-  // havePlace indicates whether the main page form has been submitted
+  // havePlace determines whether the routes page loads
   const [havePlace, setHavePlace] = useState(false);
 
+  // selectedRoute determines whether the route information page loads
   const [selectedRoute, setSelectedRoute] = useState(null);
 
 
@@ -74,16 +75,16 @@ const App = () => {
 
   // this requires a separate function from handleRouteSelect because it hits a different endpoint
   const handleJoinedRouteSelect = (name, routes) => {
-    const payload = {
-      routes: routes
-    }
 
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    }
+    let coordsParam = '';
+    routes.forEach(route => {
+      route.coords.forEach(coord => coordsParam += `${coord.lat},${coord.lng}|`)
+      coordsParam += 'r';
+    });
+
+    const payload = new URLSearchParams({ routes: coordsParam});
     
-    fetch('/multi-route-elevation', requestOptions).then(response => response.json()).then(data => {
+    fetch(`/multi-route-elevation?${payload}`).then(response => response.json()).then(data => {
       setSelectedRoute({
         name: name,
         coords: data.coords,
@@ -100,13 +101,12 @@ const App = () => {
   const handleRouteSelect = (event, name, positions, distance) => {
     event.preventDefault();
     
-    const payload = { coords: positions }
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    }
+    let positionsString = '';
+    positions.forEach((position) => positionsString += `${position.lat},${position.lng}|`)
+
+    const payload = new URLSearchParams({ coords: positionsString });
     
-    fetch('/elevation', requestOptions).then(response => response.json()).then(data => {
+    fetch(`/elevation?${payload}`).then(response => response.json()).then(data => {
       setSelectedRoute({
         name: name,
         coords: data.coords,
