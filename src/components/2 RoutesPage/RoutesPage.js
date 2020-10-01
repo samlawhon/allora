@@ -1,154 +1,132 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import RoutesList from './RoutesList';
 import RoutesMap from './RoutesMap';
 import './RoutesMap.css';
 
-class RoutesPage extends Component {
+const RoutesPage = props => {
 
-    constructor(props) {
-        super(props);
+    const [coords, setCoords] = useState({lat: null, lon: null});
+    const [trailheads, setTrailheads] = useState(null);
+    const [trailCoords, setTrailCoords] = useState(null);
+    const [mapZoom, setMapZoom] = useState(12);
+    const [marker, setMarker] = useState(null);
 
-        this.resetTrailCoords = this.resetTrailCoords.bind(this);
-        this.handleTrailheadSelect = this.handleTrailheadSelect.bind(this);
+    const HEIGHT_FROM_CENTER = 0.10        // represents about 14 miles from top to bottom
+    const WIDTH_FROM_CENTER = 0.15;        // represents about 16 miles from side to side
 
-        this.HEIGHT_FROM_CENTER = 0.10;       // represents about 14 miles from top to bottom
-        this.WIDTH_FROM_CENTER = 0.15;        // represents about 16 miles from side to side
-
-        this.state = {
-            coords: {
-                lat: null,
-                lon: null
-            },
-            trailheads: null,
-            trailCoords: null,
-            mapZoom: 12,
-            marker: null
-        }
-    }
-
-    handleTrailheadSelect(event) {
-        let newViewport = {
+    const handleTrailheadSelect = event => {
+        const newCoords = {
             lat: Number(event.currentTarget.dataset.lat),
-            lon: Number(event.currentTarget.dataset.lng),
-            zoom: this.state.mapZoom
+            lon: Number(event.currentTarget.dataset.lng)
         }
-        this.resetTrailCoords(newViewport);
-        this.setState({
-            coords: {
-                lat: Number(event.currentTarget.dataset.lat),
-                lon: Number(event.currentTarget.dataset.lng)
-            },
-            marker: {
-                lat: Number(event.currentTarget.dataset.lat),
-                lon: Number(event.currentTarget.dataset.lng)
-            }
-        });
+        const newViewport = {
+            ...newCoords,
+            zoom: mapZoom
+        }
+        resetTrailCoords(newViewport);
+        setCoords(newCoords);
+        setMarker(newCoords);
     }
 
-    getTrailheads() {
-        const data = {
-            city_name: this.props.location,
+    const getTrailheads = useCallback(() => {
+        const payload = {
+            city_name: props.location,
             distance: 30
         }
         const requestOptions = {
             method: 'POST',
-            body: JSON.stringify(data)
-        
+            body: JSON.stringify(payload)
         }
 
-        fetch('/trailheads', requestOptions).then(response => response.json()).then(data => this.setState({trailheads: data}));
-    }
+        fetch('/trailheads', requestOptions).then(response => response.json()).then(trailHeads => setTrailheads(trailHeads));
+    }, [props.location]);
 
-    getLocationCoords() {
+    const getTrailCoords = useCallback( (lat, lon) => {
         const payload = {
-            city_name: this.props.location
+            lat: lat,
+            lon: lon,
+            height_from_center: HEIGHT_FROM_CENTER,
+            width_from_center: WIDTH_FROM_CENTER,
+            distance: props.maxDistance
+        }
+        const requestOptions = {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        }
+        fetch('/trail-coords', requestOptions).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
+    }, [props.maxDistance]);
+
+    const getLocationCoords = useCallback(() => {
+        const payload = {
+            city_name: props.location
         }
         const requestOptions = {
             method: 'POST',
             body: JSON.stringify(payload)
         }
 
-        fetch('/lat-lng', requestOptions).then(response => response.json()).then(data => this.setState({coords: data})).then(() => this.getTrailCoords());
-    }
+        fetch('/lat-lng', requestOptions).then(response => response.json()).then(coords => {
+            setCoords(coords);
+            getTrailCoords(coords.lat, coords.lon)
+        })
+    }, [props.location, getTrailCoords]);
 
-    getTrailCoords() {
-        const payload = {
-            lat: this.state.coords.lat,
-            lon: this.state.coords.lon,
-            height_from_center: this.HEIGHT_FROM_CENTER,
-            width_from_center: this.WIDTH_FROM_CENTER,
-            distance: this.props.maxDistance
-        }
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        }
-        fetch('/trail-coords', requestOptions).then(response => response.json()).then(data => this.setState({trailCoords: data}));
-    }
-
-    resetTrailCoords(viewport) {
+    const resetTrailCoords = viewport => {
         if (!viewport) {
             return
         }
-        this.setState({
-            coords: {
-                lat: viewport.lat,
-                lon: viewport.lon
-            },
-            mapZoom: viewport.zoom
-        });
+        setCoords({lat: viewport.lat, lon: viewport.lon});
+        setMapZoom(viewport.zoom);
         const payload = {
             lat: viewport.lat,
             lon: viewport.lon,
-            height_from_center: this.HEIGHT_FROM_CENTER,
-            width_from_center: this.WIDTH_FROM_CENTER,
-            distance: this.props.maxDistance
+            height_from_center: HEIGHT_FROM_CENTER,
+            width_from_center: WIDTH_FROM_CENTER,
+            distance: props.maxDistance
         }
         const requestOptions = {
             method: 'POST',
             body: JSON.stringify(payload)
         }
-        fetch('/trail-coords', requestOptions).then(response => response.json()).then(data => this.setState({trailCoords: data}));
+        fetch('/trail-coords', requestOptions).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
     }
 
-    componentDidMount() {
-        this.getLocationCoords();
-        this.getTrailheads();
-    }
+    useEffect(() => {
+        getLocationCoords();
+        getTrailheads();
+    }, [getLocationCoords, getTrailheads]);
 
-    render() {
-        return (
-            <Container className="pt-4 pb-4" id="routes-page">
-                <h1 className="display-3 font-weight-bold routes-map-header">Choose your trail</h1>
-                <br/>
-                <Row>
-                    <Col sm="12" lg="8">
-                        <RoutesMap 
-                        location={this.props.location} 
-                        handleRouteSelect={this.props.handleRouteSelect}
-                        resetTrailCoords={this.resetTrailCoords} 
-                        trailCoords={this.state.trailCoords}
-                        coords={this.state.coords}
-                        mapZoom={this.state.mapZoom}
-                        marker={this.state.marker}
-                        handleJoinedRouteSelect={this.props.handleJoinedRouteSelect}
+    return (
+        <Container className="pt-4 pb-4" id="routes-page">
+            <h1 className="display-3 font-weight-bold routes-map-header">Choose your trail</h1>
+            <br/>
+            <Row>
+                <Col sm="12" lg="8">
+                    <RoutesMap 
+                    location={props.location} 
+                    handleRouteSelect={props.handleRouteSelect}
+                    resetTrailCoords={resetTrailCoords} 
+                    trailCoords={trailCoords}
+                    coords={coords}
+                    mapZoom={mapZoom}
+                    marker={marker}
+                    handleJoinedRouteSelect={props.handleJoinedRouteSelect}
+                    />
+                </Col>
+                <Col sm="12" lg="4">
+                    <h4>Popular trail heads on Hiking Project</h4>
+                    <div className="routesList">
+                        <RoutesList 
+                        trailheads={trailheads}
+                        handleRouteSelect={props.handleRouteSelect}
+                        handleTrailheadSelect={handleTrailheadSelect}
                         />
-                    </Col>
-                    <Col sm="12" lg="4">
-                        <h4>Popular trail heads on Hiking Project</h4>
-                        <div className="routesList">
-                            <RoutesList 
-                            trailheads={this.state.trailheads}
-                            handleRouteSelect={this.props.handleRouteSelect}
-                            handleTrailheadSelect={this.handleTrailheadSelect}
-                            />
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
-        );
-    }
+                    </div>
+                </Col>
+            </Row>
+        </Container>
+    );
 }
 
 export default RoutesPage;

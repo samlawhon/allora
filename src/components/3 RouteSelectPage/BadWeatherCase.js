@@ -14,7 +14,7 @@ const BadWeatherCase = props => {
             body: JSON.stringify(payload)
         }
         fetch('/coldest-weather', requestOptions).then(response => response.json()).then(lowestTemp => setLowestTemp(lowestTemp));
-    }, [props.lat, props.lng]);
+    }, [props]);
 
     const renderBadCaseImage = () => {
         

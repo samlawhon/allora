@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Col } from 'reactstrap';
 
 const RouteImage = props =>  {
@@ -8,7 +8,7 @@ const RouteImage = props =>  {
 
     const [imageURL, setImageURL] = useState(null);
 
-    const updateUrl = () => {
+    useEffect(() => {
         const metadataAPI = new URL('https://maps.googleapis.com/maps/api/streetview/metadata');
         const metadataParams = {
             location: `${props.lat},${props.lng}`,
@@ -31,19 +31,7 @@ const RouteImage = props =>  {
                 setImageURL(null);
             }
         });
-    }
-
-    const data = useRef();
-
-    useEffect(() => {
-        if (!data.current || (data.current.lat !== props.lat && data.current.lng !== props.lng)) {
-            updateUrl();
-            data.current = {
-                lat: props.lat,
-                lng: props.lng
-            }
-        }
-    });
+    }, [props.lat, props.lng]);
 
     const image = (
         <Fragment>
