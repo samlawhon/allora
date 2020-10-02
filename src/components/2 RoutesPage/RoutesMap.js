@@ -49,6 +49,7 @@ const RoutesMap = props => {
         <div>
             <MapMenu
             highlightedRoutes={highlightedRoutes}
+            handleRouteSelect={props.handleRouteSelect}
             handleJoinedRouteSelect={props.handleJoinedRouteSelect}
             drawnRoutes={drawnRoutes}
             trailCoords={props.trailCoords}

@@ -1,26 +1,11 @@
 import React from 'react';
-import { Polyline, Popup } from 'react-leaflet';
-import { Button } from 'reactstrap';
+import { Polyline, Tooltip } from 'react-leaflet';
 
 const Route = props => {
 
     const selected = props.highlightedRoutes.has(props.name);
 
     const [weight, color] = selected ? ["8", "#52e3bc"] : ["4", "#e55934"];
-
-    let routeSelectButton;
-    if (!props.creatingMode) {
-        routeSelectButton = (
-            <Button 
-            color="info" 
-            onClick={event => {
-                props.handleRouteSelect(event, props.name, props.positions, props.distance);
-            }}
-            >
-                take me there
-            </Button>
-        );
-    }
 
     const handleClick = () => {
         if (selected) {
@@ -54,13 +39,10 @@ const Route = props => {
         key={props.name}
         onClick={handleClick}
         >
-            <Popup
-            onClose={() => props.creatingMode ? null : props.setHighlightedRoutes( new Set() )}
-            >
+            <Tooltip>
                 <h3>{props.name}</h3>
                 <h5>{props.distance.toFixed(2)} miles</h5>
-                {routeSelectButton}
-            </Popup>
+            </Tooltip>
         </Polyline>
     );
 

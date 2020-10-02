@@ -8,7 +8,9 @@ const OpeningBanner = () => (
         <Card className="mr-md-2 mr-lg-5">
             <CardBody>
                 <CardTitle><h3>Outdoor trip planning is hard</h3></CardTitle>
-                <CardText>Eldora analyses outdoor risks to make your planning easier.</CardText>
+                <CardText>
+                    Using Eldora, you can create your own route and analyze it.
+                </CardText>
             </CardBody>
         </Card>
         </Container>
