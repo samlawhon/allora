@@ -5,26 +5,17 @@ import json
 import os
 import requests
 from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from api import settings
 from api.flaskr.trailheads import HikingApi
 from api.flaskr.geocoding import geocode
 from api.flaskr.weather import get_current_weather
 from api.flaskr.cold_weather import find_closest_station, find_coldest_weather
-from api.flaskr.geodata import generate_trails
+from api.flaskr.trails import generate_trails
 from api.flaskr.elevation import get_elevation, process_elevation
 from api.flaskr.join_routes import join_routes, get_distance
 from api.settings import GOOGLE_MAPS_API_KEY
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONNECTION_STING
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config.from_object(__name__)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db, directory=os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'migrations')))
-
-from api.flaskr.model import TrailModel
 
 @app.route('/lat-lng')
 def lat_lng():
