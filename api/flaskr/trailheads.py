@@ -3,7 +3,6 @@ Module for interacting with the hiking project API
 '''
 import requests
 from api.settings import HIKING_PROJECT_API_KEY
-from api.flaskr.hiking_trail import HikingTrail
 
 class HikingApi:
     '''
@@ -19,8 +18,8 @@ class HikingApi:
         trail_endpoint = self.ENDPOINT + 'get-trails'
         payload = {'lat': lat, 'lon': lon, 'maxDistance': max_dist, 'key': HIKING_PROJECT_API_KEY}
         res = requests.get(trail_endpoint, payload)
-        trails = res.json()
-        return [HikingTrail(**trail) for trail in trails['trails']]
+        trails = res.json()['trails']
+        return trails
 
     def get_conditions(self, ids):
         '''

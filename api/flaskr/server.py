@@ -8,8 +8,8 @@ from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from api import settings
-from api.flaskr.hiking import HikingApi
-from api.flaskr.geocoding_api import geocode
+from api.flaskr.trailheads import HikingApi
+from api.flaskr.geocoding import geocode
 from api.flaskr.weather import get_current_weather
 from api.flaskr.cold_weather import find_closest_station, find_coldest_weather
 from api.flaskr.geodata import generate_trails
@@ -54,8 +54,7 @@ def get_trails():
         return "Geocoding error", 500
     hiking_api = HikingApi()
     trails = hiking_api.get_trails(lat_lng[0], lat_lng[1], max_distance)
-    trails_dicts = [trail.as_dict() for trail in trails]
-    return json.dumps(trails_dicts)
+    return json.dumps(trails)
 
 @app.route('/trail-coords')
 def get_trail_coords():

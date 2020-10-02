@@ -5,17 +5,17 @@ import './RoutesPage.css'
 
 const RoutesList = props => {
 
-    const createRouteCard = ({image, name, lat, lng}) => (
+    const createRouteCard = ({imgMedium, name, latitude, longitude}) => (
         <Col xs="12" key={name}>
             <Media 
             id={name}
-            data-lat={lat} 
-            data-lng={lng} 
+            data-lat={latitude} 
+            data-lng={longitude} 
             onClick={props.handleTrailheadSelect} 
             className="mb-4 route-card rounded p-1"
             >
                 <Media left>
-                    <Media object src={image} className="route-small-image" />
+                    <Media object src={imgMedium} className="route-small-image" />
                 </Media>
                 <Media body className="pl-3">
                     <Media heading>{name}</Media>
