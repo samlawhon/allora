@@ -3,6 +3,7 @@ from google.cloud import bigquery
 from google.cloud import bigquery
 from google.oauth2 import service_account
 from api.flaskr.great_circle import great_circle
+from datetime import datetime
 
 try:
     credentials = service_account.Credentials.from_service_account_file(
@@ -25,6 +26,9 @@ def find_closest_station(lat, lon):
     :return: dict containing information about closest weather stations
     '''
 
+    CURRENT_YEAR = datetime.today().year
+    YEARS_BACK = 10
+
     QUERY = (
         'SELECT usaf, wban, begin, `end`, name, lat, lon, elev FROM `bigquery-public-data.noaa_gsod.stations` '
         'WHERE lat BETWEEN {lat}-1 and {lat}+1 '
@@ -44,7 +48,7 @@ def find_closest_station(lat, lon):
         current_lat = row.lat
         current_lon = row.lon
         current_dist = great_circle(lat, lon, current_lat, current_lon)
-        if current_dist < closest_dist and int(row.end[0:4]) == 2020 and int(row.begin[0:4]) <= 2010:
+        if current_dist < closest_dist and int(row.end[0:4]) == CURRENT_YEAR and int(row.begin[0:4]) <= CURRENT_YEAR - YEARS_BACK:
             closest = row.name
             closest_wban = row.wban
             closest_usaf = row.usaf
@@ -69,7 +73,7 @@ def find_coldest_weather(day, month, wban, usaf):
     :return: coldest weather in fahrenheit
     '''
 
-    CURRENT_YEAR = 2020
+    CURRENT_YEAR = datetime.today().year
     YEARS_BACK = 10
 
     query = "SELECT MIN(min), FROM ( "
