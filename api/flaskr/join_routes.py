@@ -1,18 +1,8 @@
 from api.flaskr.great_circle import great_circle
-from api.flaskr.elevation import generate_coords
 from sys import maxsize
 from queue import PriorityQueue
 
-def process_routes_from_params(routes_string):
-    routes = routes_string.split('r')
-    for i, route in enumerate(routes):
-        if not route:
-            del routes[i]
-            continue
-        routes[i] = generate_coords(route)
-    return routes
-
-def join_routes(routes_string):
+def join_routes(routes):
     '''
     Joins a list of routes into one route, via a greedy approach. 
     The algorithms finds two endpoints (on two different routes) such that the distance between those two
@@ -21,28 +11,27 @@ def join_routes(routes_string):
     list of routes.
     :return: a merged route
     '''
-    routes = process_routes_from_params(routes_string)
-
     while len(routes) > 1:
 
         joining_scheme, min_between_routes = get_closest_routes(routes)
         
         route1, route2 = min_between_routes
         
+        route1_coords, route2_coords = route1['coords'], route2['coords']
         merged_route_coords = []
 
         if joining_scheme == 'start1-start2':
-            route1.reverse()
-            merged_route_coords = route1 + route2
+            route1_coords.reverse()
+            merged_route_coords = route1_coords + route2_coords
         elif joining_scheme == 'start1-end2':
-            merged_route_coords = route2 + route1
+            merged_route_coords = route2_coords + route1_coords
         elif joining_scheme == 'end1-start2':
-            merged_route_coords = route1 + route2
+            merged_route_coords = route1_coords + route2_coords
         else:  # end1-end2
-            route2.reverse()
-            merged_route_coords = route1 + route2
+            route2_coords.reverse()
+            merged_route_coords = route1_coords + route2_coords
         
-        routes.append(merged_route_coords)
+        routes.append({'coords': merged_route_coords})
         routes.remove(route1)
         routes.remove(route2)
     
@@ -61,17 +50,17 @@ def get_closest_routes(routes):
     min_between_joining_scheme = ''
 
     for i, route1 in enumerate(routes):
-        
-        start1 = route1[0]
-        end1 = route1[-1]
+
+        start1 = route1['coords'][0]
+        end1 = route1['coords'][-1]
 
         for j, route2 in enumerate(routes):
 
             if i == j:
                 continue
-
-            start2 = route2[0]
-            end2 = route2[-1]
+                
+            start2 = route2['coords'][0]
+            end2 = route2['coords'][-1]
 
             local_min_distance, joining_scheme = get_min_joining_scheme(start1, end1, start2, end2)
 
