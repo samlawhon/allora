@@ -12,6 +12,20 @@ DIFFICULTY_SCALE = [
     "Very steeply uphill. PROCEED WITH CAUTION"
 ]
 
+def generate_coords(coords_string):
+    '''
+    Function to process the coordinates string obtained through the GET request params
+    :return: list of dicts, where each dict represents a coordinate
+    '''
+    coordinate_pairs = coords_string.split('|')
+    for i, coordinate_pair in enumerate(coordinate_pairs):
+        if not coordinate_pair:
+            del coordinate_pairs[i]
+            continue
+        lat, lng = coordinate_pair.split(',')
+        coordinate_pairs[i] = {'lat': float(lat), 'lng': float(lng)}
+    return coordinate_pairs
+
 def get_elevation(coords):
     '''
     Function to retrieve elevation for a set of coordinates from Google maps API

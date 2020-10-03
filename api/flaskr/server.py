@@ -13,7 +13,7 @@ from api.flaskr.geocoding_api import geocode
 from api.flaskr.weather import get_current_weather
 from api.flaskr.cold_weather import find_closest_station, find_coldest_weather
 from api.flaskr.geodata import generate_trails
-from api.flaskr.elevation import get_elevation, process_elevation
+from api.flaskr.elevation import get_elevation, process_elevation, generate_coords
 from api.flaskr.join_routes import join_routes, get_distance
 from api.settings import GOOGLE_MAPS_API_KEY
 
@@ -101,7 +101,7 @@ def get_cold_weather():
     coldest_weather -= altitude_adjustment
     return json.dumps(round(coldest_weather))
 
-@app.route('/elevation', methods=['POST'])
+@app.route('/elevation')
 def get_elevation_and_compute_route_difficulty():
     """
     API endpoint to get elevation associated with a route and process that information to determine route difficulty
@@ -110,11 +110,12 @@ def get_elevation_and_compute_route_difficulty():
     coordinates = request.get_json(force=True)['coords']
     if not coordinates:
         return "Empty coordinates list supplied", 400
+    coordinates = generate_coords(coords_string)
     coords_with_elevation = get_elevation(coordinates)
     processed_coords = process_elevation(coords_with_elevation)
     return json.dumps(processed_coords)
 
-@app.route('/multi-route-elevation', methods=['POST'])
+@app.route('/multi-route-elevation')
 def create_route_and_compute_elevation_and_difficulty():
     '''
     API endpoint to join multiple trails, query Google maps for elevation information and process that information

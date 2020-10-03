@@ -83,7 +83,7 @@ const App = () => {
       })
     }
     
-    fetch('/multi-route-elevation', requestOptions).then(response => response.json()).then(data => {
+    fetch(`/multi-route-elevation?${payload}`).then(response => response.json()).then(data => {
       setSelectedRoute({
         name: name,
         coords: data.coords,
@@ -108,7 +108,7 @@ const App = () => {
       })
     }
     
-    fetch('/elevation', requestOptions).then(response => response.json()).then(data => {
+    fetch(`/elevation?${payload}`).then(response => response.json()).then(data => {
       setSelectedRoute({
         name: name,
         coords: data.coords,
