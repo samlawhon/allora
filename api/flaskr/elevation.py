@@ -2,6 +2,7 @@ import requests
 from api.flaskr.great_circle import great_circle
 from api.settings import GOOGLE_MAPS_API_KEY
 from api.flaskr.unit_conversions import feet_to_meters, miles_to_feet
+from api.flaskr.geocoding_api import reverse_geocode
 
 DIFFICULTY_SCALE = [
     "Flat",
@@ -12,11 +13,11 @@ DIFFICULTY_SCALE = [
 ]
 
 def get_elevation(coords):
-    """
+    '''
     Function to retrieve elevation for a set of coordinates from Google maps API
     :return: list of one dictionary for coordinate in structure: {elevation: float, location:{lat: float, lng: float}}
-    """
-    locations_string = ""
+    '''
+    locations_string = ''
 
     # try only analyzing every other coordinate if the request is over 500 coords (Google maps elevation API limit)
     GOOGLE_MAPS_ELEVATION_API_COORD_LIMIT = 500
@@ -51,7 +52,7 @@ def get_elevation(coords):
 def determine_difficulty(elevation_change, distance_change):
     distance_change = miles_to_feet(distance_change)
     slope = elevation_change / distance_change if distance_change > 0 else 0
-    if slope > 0.5:
+    if slope > 0.6:
         return 4
     if slope > 0.4:
         return 3
@@ -127,10 +128,14 @@ def process_elevation(coords_with_elevation):
 
         prev = current_coords
     
+    address_coords = coords_with_elevation[0] if start_lower_than_finish else coords_with_elevation[-1]
+    address = reverse_geocode(address_coords)
+
     return {
         "coords": coords_with_elevation, 
         "difficulty": DIFFICULTY_SCALE[max_difficulty], 
         "maximumElevation": max_elevation,
         "maximumElevationCoordinates": max_elevation_coords,
-        "chartData": chart_data
+        "chartData": chart_data,
+        "address": address
         }

@@ -4,7 +4,7 @@ const SearchForm = props => (
     <div>
         <h3 className="font-weight-bold main-sub-header">Where to?</h3>
         <form onSubmit={props.submitHandler}>
-            <label htmlFor="search-bar"><h5>Search by city, trail or route</h5></label>
+            <label htmlFor="search-bar"><h5>Search by city</h5></label>
             <input 
             className="form-control form-text" 
             onChange={props.locationChangeHandler} 

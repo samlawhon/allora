@@ -9,23 +9,23 @@ const RouteImage = props =>  {
     const [imageURL, setImageURL] = useState(null);
 
     useEffect(() => {
-        const metadataAPI = new URL('https://maps.googleapis.com/maps/api/streetview/metadata');
-        const metadataParams = {
-            location: `${props.lat},${props.lng}`,
-            key: `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
-        }
-        metadataAPI.search = new URLSearchParams(metadataParams).toString();
-        fetch(metadataAPI).then(response => response.json()).then(data => {
+        
+        const payload = new URLSearchParams({
+            lat: props.lat,
+            lng: props.lng
+        });
+
+        fetch(`/image-meta-data?${payload}`).then(response => response.json()).then(data => {
             if (data.status !== "ZERO_RESULTS") {
-                const streetviewAPI = new URL('https://maps.googleapis.com/maps/api/streetview');
-                const params = {
-                    location: `${props.lat},${props.lng}`,
+
+                const payload = new URLSearchParams({
+                    lat: props.lat,
+                    lng: props.lng,
                     size: IMAGESIZE,
-                    fov: FIELDOFVIEW,
-                    key: `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
-                }
-                streetviewAPI.search = new URLSearchParams(params).toString();
-                setImageURL(streetviewAPI.href);
+                    fov: FIELDOFVIEW
+                });
+
+                setImageURL(`/image?${payload}`);
             }
             else{
                 setImageURL(null);

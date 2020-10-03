@@ -1,7 +1,9 @@
-import math
+from sys import maxsize
 from google.cloud import bigquery
 from google.cloud import bigquery
 from google.oauth2 import service_account
+from api.flaskr.great_circle import great_circle
+from datetime import datetime
 
 try:
     credentials = service_account.Credentials.from_service_account_file(
@@ -13,20 +15,24 @@ try:
         credentials=credentials,
         project=credentials.project_id,
     )
-except FileNotFoundError:
-    print("Error loading Google big query")
 
-def calculate_distance(x1, y1, x2, y2):
-    return math.sqrt((x2-x1)**2+(y2-y1)**2)
+except FileNotFoundError:
+    raise Exception("Error loading Google big query")
 
 def find_closest_station(lat, lon):
+    '''
+    Finds the closest weather station to the latitude and longitude parameters by querying Google BigQuery,
+    if the station has data for 2020 and began recording data on or prior to 2010
+    :return: dict containing information about closest weather stations
+    '''
+
+    CURRENT_YEAR = datetime.today().year
+    YEARS_BACK = 10
 
     QUERY = (
         'SELECT usaf, wban, begin, `end`, name, lat, lon, elev FROM `bigquery-public-data.noaa_gsod.stations` '
-        'WHERE lat>{lat}-1 '
-        'AND lat<{lat}+1 '
-        'AND lon>{lon}-1 '
-        'AND lon<{lon}+1 ')
+        'WHERE lat BETWEEN {lat}-1 and {lat}+1 '
+        'AND lon BETWEEN {lon}-1 and {lon}+1 ')
     query_job = client.query(QUERY.format(lat=lat, lon=lon))  # API request
     rows = query_job.result()  # Waits for query to finish
 
@@ -36,12 +42,13 @@ def find_closest_station(lat, lon):
     closest_lat = -1
     closest_lon = -1
     closest_elev = -1
-    closest_dist = 100000000
+    closest_dist = maxsize
+    
     for row in rows:
         current_lat = row.lat
         current_lon = row.lon
-        current_dist = calculate_distance(lat, lon, current_lat, current_lon)
-        if (current_dist<closest_dist and int(row.end[0:4])==2020 and int(row.begin[0:4])<=2010):
+        current_dist = great_circle(lat, lon, current_lat, current_lon)
+        if current_dist < closest_dist and int(row.end[0:4]) == CURRENT_YEAR and int(row.begin[0:4]) <= CURRENT_YEAR - YEARS_BACK:
             closest = row.name
             closest_wban = row.wban
             closest_usaf = row.usaf
@@ -49,49 +56,40 @@ def find_closest_station(lat, lon):
             closest_lon = row.lon
             closest_elev = row.elev
             closest_dist = current_dist
-    return {'name': closest, 'wban': closest_wban, 'usaf':closest_usaf, 'latitude': closest_lat, 
-    'longitude':closest_lon, 'elevation':closest_elev, 'distance':closest_dist}
+    
+    return {
+        'name': closest, 
+        'wban': closest_wban, 
+        'usaf':closest_usaf, 
+        'latitude': closest_lat, 
+        'longitude':closest_lon, 
+        'elevation':closest_elev, 
+        'distance':closest_dist
+    }
 
 def find_coldest_weather(day, month, wban, usaf):
+    '''
+    Finds the coldest weather recorded in the past 10 years at the given weather station on the given day
+    :return: coldest weather in fahrenheit
+    '''
 
-    QUERY = (
-        'SELECT MIN(min), '
-        'FROM ( '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2020` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2019` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2018` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2017` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2016` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2015` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2014` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2013` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2012` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2011` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        'UNION ALL '
-        'SELECT stn, min '
-        'FROM `bigquery-public-data.noaa_gsod.gsod2010` where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}" '
-        ')'
-    )
-    query_job = client.query(QUERY.format(day=day, month=month, wban=wban, usaf=usaf))  # API request
+    CURRENT_YEAR = datetime.today().year
+    YEARS_BACK = 10
+
+    query = "SELECT MIN(min), FROM ( "
+
+    def generate_row(year_diff):
+        return (
+            "SELECT stn, min "
+            f'FROM `bigquery-public-data.noaa_gsod.gsod{CURRENT_YEAR - year_diff}`' 
+            f'where da="{day}" and mo="{month}" and wban="{wban}" and stn="{usaf}"'
+        )
+
+    sql_rows = map(generate_row, list(range(YEARS_BACK + 1)))
+
+    query += " UNION ALL ".join(sql_rows) + " )"
+
+    query_job = client.query(query)  # API request
     rows = query_job.result()  # Waits for query to finish
     for row in rows:
         return row.f0_

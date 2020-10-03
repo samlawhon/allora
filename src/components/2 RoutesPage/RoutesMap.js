@@ -8,8 +8,7 @@ import MapMenu from './MapMenu';
 
 const RoutesMap = props => {
 
-    let viewport;
-
+    const [mapViewport, setMapViewport] = useState(null);
     const [creatingMode, setCreatingMode] = useState(false);
     const [highlightedRoutes, setHighlightedRoutes] = useState( new Set() );
     const [drawnRoutes, setDrawnRoutes] = useState( {} );
@@ -57,7 +56,7 @@ const RoutesMap = props => {
             setCreatingMode={setCreatingMode}
             setHighlightedRoutes={setHighlightedRoutes}
             resetTrailCoords={props.resetTrailCoords}
-            viewport={viewport}
+            viewport={mapViewport}
             />
             <LeafletMap
             center={[lat, lon]}
@@ -71,11 +70,11 @@ const RoutesMap = props => {
             animate={true}
             easeLinearity={0.35}
             onViewportChange={viewport => {
-                viewport = {
+                setMapViewport({
                     lat: viewport.center[0],
                     lon: viewport.center[1],
                     zoom: viewport.zoom
-                };
+                });
             }}
             >
                 <TileLayer

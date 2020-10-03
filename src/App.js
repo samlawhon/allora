@@ -13,9 +13,10 @@ const App = () => {
   const [maxDistance, setMaxDistance] = useState(10);
   const [dayRange, setDayRange] = useState({from: null, to: null});
 
-  // havePlace indicates whether the main page form has been submitted
+  // havePlace determines whether the routes page loads
   const [havePlace, setHavePlace] = useState(false);
 
+  // selectedRoute determines whether the route information page loads
   const [selectedRoute, setSelectedRoute] = useState(null);
 
 
@@ -74,13 +75,12 @@ const App = () => {
 
   // this requires a separate function from handleRouteSelect because it hits a different endpoint
   const handleJoinedRouteSelect = (name, routes) => {
-    const payload = {
-      routes: routes
-    }
 
     const requestOptions = {
       method: 'POST',
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        routes: routes
+      })
     }
     
     fetch('/multi-route-elevation', requestOptions).then(response => response.json()).then(data => {
@@ -91,7 +91,8 @@ const App = () => {
         difficulty: data.difficulty,
         maxElevation: data.maximumElevation,
         maxElevationCoords: data.maximumElevationCoordinates,
-        chartData: data.chartData
+        chartData: data.chartData,
+        address: data.address
       });
     }).catch(() => alert("route too long"));
   }
@@ -99,11 +100,12 @@ const App = () => {
 
   const handleRouteSelect = (event, name, positions, distance) => {
     event.preventDefault();
-    
-    const payload = { coords: positions }
+
     const requestOptions = {
       method: 'POST',
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        coords: positions
+      })
     }
     
     fetch('/elevation', requestOptions).then(response => response.json()).then(data => {
@@ -114,7 +116,8 @@ const App = () => {
         difficulty: data.difficulty,
         maxElevation: data.maximumElevation,
         maxElevationCoords: data.maximumElevationCoordinates,
-        chartData: data.chartData
+        chartData: data.chartData,
+        address: data.address
       });
     });
   }
