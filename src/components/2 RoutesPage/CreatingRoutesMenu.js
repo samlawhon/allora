@@ -5,12 +5,17 @@ import ReactTooltip from 'react-tooltip';
 const CreatingRoutesMenu = props => (
     <Row>
         <Col xs="6">
-            <Button onClick={()=>{
+            <Button 
+            onClick={()=>{
                 const trailsToJoin = [];
                 props.highlightedRoutes.forEach((trailName) => trailsToJoin.push(props.trailCoords[trailName]));
                 Object.keys(props.drawnRoutes).forEach(layerId => trailsToJoin.push({coords: props.drawnRoutes[layerId]}));
                 props.handleJoinedRouteSelect("Joined Route", trailsToJoin);
-            }}>analyze route</Button>
+            }}
+            color="success"
+            >
+                Analyze
+            </Button>
         </Col>
         <Col xs="1" className="info-icon">
             <img 

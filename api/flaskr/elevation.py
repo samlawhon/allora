@@ -2,7 +2,7 @@ import requests
 from api.flaskr.great_circle import great_circle
 from api.settings import GOOGLE_MAPS_API_KEY
 from api.flaskr.unit_conversions import feet_to_meters, miles_to_feet
-from api.flaskr.geocoding_api import reverse_geocode
+from api.flaskr.geocoding import reverse_geocode
 
 DIFFICULTY_SCALE = [
     "Flat",

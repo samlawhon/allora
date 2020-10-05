@@ -17,9 +17,34 @@ const MapMenu = props => {
         />
     );
 
-    const createTrailButton = <Button onClick={() => props.setCreatingMode(true)}>Create trail</Button>;
+    let analyzeButton;
+    if (props.highlightedRoutes.size > 0) {
+        analyzeButton = (
+            <Button 
+            onClick={event => {
+                const name = props.highlightedRoutes.keys().next().value;
+                const { coords, distance } = props.trailCoords[name];
+                props.handleRouteSelect(event, name, coords, distance);
+            }}
+            color="success"
+            >
+                Analyze
+            </Button>
+        );
+    }
+
+    const defaultMenu = (
+        <Row>
+            <Col xs="6">
+                {analyzeButton}
+            </Col>
+            <Col xs="6">
+                <Button onClick={() => props.setCreatingMode(true)}>Create trail</Button>
+            </Col>
+        </Row>
+    )
     
-    const creatingRoutesMenu = props.creatingMode ? constructCreatingRoutesMenu() : createTrailButton;
+    const creatingRoutesMenu = props.creatingMode ? constructCreatingRoutesMenu() : defaultMenu;
 
     return (
         <Container>
