@@ -15,7 +15,7 @@ const RouteImage = props =>  {
             lng: props.lng
         });
 
-        fetch(`/image-meta-data?${payload}`).then(response => response.json()).then(data => {
+        fetch(`/api/image-meta-data?${payload}`).then(response => response.json()).then(data => {
             if (data.status !== "ZERO_RESULTS") {
 
                 const payload = new URLSearchParams({
@@ -25,7 +25,7 @@ const RouteImage = props =>  {
                     fov: FIELDOFVIEW
                 });
 
-                setImageURL(`/image?${payload}`);
+                setImageURL(`/api/image?${payload}`);
             }
             else{
                 setImageURL(null);

@@ -78,12 +78,15 @@ const App = () => {
 
     const requestOptions = {
       method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
       body: JSON.stringify({
         routes: routes
       })
     }
     
-    fetch('/multi-route-elevation', requestOptions).then(response => response.json()).then(data => {
+    fetch('/api/multi-route-elevation', requestOptions).then(response => response.json()).then(data => {
       setSelectedRoute({
         name: name,
         coords: data.coords,
@@ -103,12 +106,15 @@ const App = () => {
 
     const requestOptions = {
       method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
       body: JSON.stringify({
         coords: positions
       })
     }
     
-    fetch('/elevation', requestOptions).then(response => response.json()).then(data => {
+    fetch('/api/elevation', requestOptions).then(response => response.json()).then(data => {
       setSelectedRoute({
         name: name,
         coords: data.coords,
