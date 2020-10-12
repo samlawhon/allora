@@ -17,8 +17,7 @@ const NavigationBar = () => {
     const toggle = () => (setIsOpen(!isOpen));
 
     const links =  [
-        { id: 0, href:"/how-it-works", text: "How it works" },
-        { id: 1, href:"https://www.mountaineers.org/blog/what-are-the-ten-essentials",  text: "Further reading"}
+        { id: 0, href:"https://www.mountaineers.org/blog/what-are-the-ten-essentials",  text: "Further reading"}
     ]
     
     const createNavItem = ({id, href, text}) => (
