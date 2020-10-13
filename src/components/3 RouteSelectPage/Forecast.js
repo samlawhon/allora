@@ -13,7 +13,7 @@ const Forecast = props => {
             ...props
         });
 
-        fetch(`/weather?${payload}`).then(response => response.json()).then(weatherData => setWeatherData(weatherData));
+        fetch(`/api/weather?${payload}`).then(response => response.json()).then(weatherData => setWeatherData(weatherData));
     }, [props]);
 
     const dayForecast = n => {

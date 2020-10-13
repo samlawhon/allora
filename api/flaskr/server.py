@@ -17,7 +17,7 @@ from api.settings import GOOGLE_MAPS_API_KEY
 
 app = Flask(__name__)
 
-@app.route('/lat-lng')
+@app.route('/api/lat-lng')
 def lat_lng():
     """
     Geocoding API endpoint
@@ -32,7 +32,7 @@ def lat_lng():
         return json.dumps(lat_lng_dict)
 
 
-@app.route('/trailheads')
+@app.route('/api/trailheads')
 def get_trails():
     """
     Trails list API endpoint
@@ -47,7 +47,7 @@ def get_trails():
     trails = hiking_api.get_trails(lat_lng[0], lat_lng[1], max_distance)
     return json.dumps(trails)
 
-@app.route('/trail-coords')
+@app.route('/api/trail-coords')
 def get_trail_coords():
     """
     Trail coordinates API endpoint
@@ -61,7 +61,7 @@ def get_trail_coords():
     trails = generate_trails(lat, lon, height_from_center, width_from_center, max_distance)
     return json.dumps(trails)
 
-@app.route('/weather')
+@app.route('/api/weather')
 def get_weather():
     """
     Weather API endpoint
@@ -71,7 +71,7 @@ def get_weather():
     lng = request.args['lng']
     return get_current_weather(lat, lng)
 
-@app.route('/coldest-weather')
+@app.route('/api/coldest-weather')
 def get_cold_weather():
     """
     Coldest weather API endpoint
@@ -91,26 +91,26 @@ def get_cold_weather():
     coldest_weather -= altitude_adjustment
     return json.dumps(round(coldest_weather))
 
-@app.route('/elevation', methods=['POST'])
+@app.route('/api/elevation', methods=['POST'])
 def get_elevation_and_compute_route_difficulty():
     """
     API endpoint to get elevation associated with a route and process that information to determine route difficulty
     :return: dictionary containing coordinates with elevation, difficulty, maximum elevation and its location and elevation chart data
     """
-    coordinates = request.get_json(force=True)['coords']
+    coordinates = request.get_json()['coords']
     if not coordinates:
         return "Empty coordinates list supplied", 400
     coords_with_elevation = get_elevation(coordinates)
     processed_coords = process_elevation(coords_with_elevation)
     return json.dumps(processed_coords)
 
-@app.route('/multi-route-elevation', methods=['POST'])
+@app.route('/api/multi-route-elevation', methods=['POST'])
 def create_route_and_compute_elevation_and_difficulty():
     '''
     API endpoint to join multiple trails, query Google maps for elevation information and process that information
     :return: dictionary corresponding to the merged route with same structure as get_elevation_and_compute_route_difficulty return value, except with an added 'distance' key
     '''
-    routes = request.get_json(force=True)['routes']
+    routes = request.get_json()['routes']
     if not routes:
         return "Empty route list supplied", 400
     merged_route = join_routes(routes)['coords']
@@ -125,7 +125,7 @@ def create_route_and_compute_elevation_and_difficulty():
     processed_coords['distance'] = get_distance(merged_route)
     return json.dumps(processed_coords)
 
-@app.route('/image-meta-data')
+@app.route('/api/image-meta-data')
 def proxy_image_meta_data():
     lat = request.args['lat']
     lng = request.args['lng']
@@ -137,7 +137,7 @@ def proxy_image_meta_data():
     }
     return requests.get(endpoint, payload).content
 
-@app.route('/image')
+@app.route('/api/image')
 def proxy_image_data():
     lat = request.args['lat']
     lng = request.args['lng']

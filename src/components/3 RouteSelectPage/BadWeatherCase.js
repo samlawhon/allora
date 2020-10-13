@@ -3,14 +3,17 @@ import './RouteSelectPage.css';
 
 const BadWeatherCase = props => {
     
-    const [lowestTemp, setLowestTemp] = useState(null);
+    const [lowestTemp, setLowestTemp] = useState(undefined);
 
     useEffect(() => {
         const payload = new URLSearchParams({
             ...props
         });
 
-        fetch(`/coldest-weather?${payload}`).then(response => response.json()).then(lowestTemp => setLowestTemp(lowestTemp));
+        fetch(`/api/coldest-weather?${payload}`)
+        .then(response => response.json())
+        .then(lowestTemp => setLowestTemp(lowestTemp))
+        .catch(() => setLowestTemp('unavailable'));
     }, [props]);
 
     const renderBadCaseImage = () => {
@@ -41,7 +44,14 @@ const BadWeatherCase = props => {
         )
     }
 
-    return lowestTemp ? renderBadCaseImage() : <p>Realistic bad weather case loading</p>
+    if (lowestTemp === undefined) {
+        return <p>Realistic bad weather case loading</p>
+    }
+    else if (lowestTemp === 'unavailable') {
+        return <p>Realistic bad weather case unavailable</p>
+    }
+
+    return renderBadCaseImage() 
 }
 
 export default BadWeatherCase;

@@ -32,7 +32,7 @@ const RoutesPage = props => {
     const getTrailheads = useCallback(() => {
 
         const payload = new URLSearchParams({ city_name: props.location, distance: 30 });
-        fetch(`/trailheads?${payload}`).then(response => response.json()).then(trailHeads => setTrailheads(trailHeads));
+        fetch(`/api/trailheads?${payload}`).then(response => response.json()).then(trailHeads => setTrailheads(trailHeads));
 
     }, [props.location]);
 
@@ -47,14 +47,14 @@ const RoutesPage = props => {
 
         const payload = new URLSearchParams(params);
 
-        fetch(`/trail-coords?${payload}`).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
+        fetch(`/api/trail-coords?${payload}`).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
     }, [props.maxDistance]);
 
     const getLocationCoords = useCallback(() => {
 
         const payload = new URLSearchParams({ city_name: props.location });
 
-        fetch(`/lat-lng?${payload}`).then(response => response.json()).then(coords => {
+        fetch(`/api/lat-lng?${payload}`).then(response => response.json()).then(coords => {
             setCoords(coords);
             getTrailCoords(coords.lat, coords.lon)
         });
@@ -78,7 +78,7 @@ const RoutesPage = props => {
 
         const payload = new URLSearchParams(params);
 
-        fetch(`/trail-coords?${payload}`).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
+        fetch(`/api/trail-coords?${payload}`).then(response => response.json()).then(trailCoords => setTrailCoords(trailCoords));
     }
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-Eldora is a hiking planning full stack web application.
+Allora is a hiking planning full stack web application.
 
 ## Available Scripts
 

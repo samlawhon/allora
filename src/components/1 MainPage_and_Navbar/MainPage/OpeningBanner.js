@@ -9,7 +9,7 @@ const OpeningBanner = () => (
             <CardBody>
                 <CardTitle><h3>Outdoor trip planning is hard</h3></CardTitle>
                 <CardText>
-                    Using Eldora, you can create your own route and analyze it.
+                    Using Allora, you can create your own route and analyze it.
                 </CardText>
             </CardBody>
         </Card>
