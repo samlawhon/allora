@@ -5,8 +5,12 @@ from google.oauth2 import service_account
 from api.flaskr.great_circle import great_circle
 from datetime import datetime
 
+CURRENT_YEAR = datetime.today().year
+YEARS_BACK = 10
+
 try:
     credentials = service_account.Credentials.from_service_account_file(
+        # for testing add 'api/' to the beginning of the path below if it's in the api folder
         "GOOGLE_APPLICATION_CREDENTIALS.json",
         scopes=["https://www.googleapis.com/auth/cloud-platform"],
     )
@@ -25,9 +29,6 @@ def find_closest_station(lat, lon):
     if the station has data for 2020 and began recording data on or prior to 2010
     :return: dict containing information about closest weather stations
     '''
-
-    CURRENT_YEAR = datetime.today().year
-    YEARS_BACK = 10
 
     QUERY = (
         'SELECT usaf, wban, begin, `end`, name, lat, lon, elev FROM `bigquery-public-data.noaa_gsod.stations` '
@@ -72,9 +73,6 @@ def find_coldest_weather(day, month, wban, usaf):
     Finds the coldest weather recorded in the past 10 years at the given weather station on the given day
     :return: coldest weather in fahrenheit
     '''
-
-    CURRENT_YEAR = datetime.today().year
-    YEARS_BACK = 10
 
     query = "SELECT MIN(min), FROM ( "
 
