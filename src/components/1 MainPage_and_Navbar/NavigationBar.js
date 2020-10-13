@@ -29,7 +29,7 @@ const NavigationBar = () => {
     return (
         <Container>
             <Navbar color="white" light expand="md" fixed="top" className="pl-5 pr-5">
-                <NavbarBrand href="/" className="mr-auto font-weight-bold"><h1 className="appName">Eldora</h1></NavbarBrand>
+                <NavbarBrand href="/" className="mr-auto font-weight-bold"><h1 className="appName">Allora</h1></NavbarBrand>
                 <NavbarToggler onClick={toggle}/>
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="ml-auto" navbar>
